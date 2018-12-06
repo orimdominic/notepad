@@ -1,7 +1,6 @@
 package com.sudokaizen.notepad;
 
-import android.arch.lifecycle.ViewModel;
-import android.arch.lifecycle.ViewModelProvider;
+
 import android.arch.lifecycle.ViewModelProviders;
 import android.content.Intent;
 import android.support.design.widget.FloatingActionButton;
