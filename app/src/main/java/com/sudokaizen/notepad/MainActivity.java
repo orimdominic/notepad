@@ -2,17 +2,20 @@ package com.sudokaizen.notepad;
 
 import android.arch.lifecycle.ViewModel;
 import android.arch.lifecycle.ViewModelProvider;
+import android.arch.lifecycle.ViewModelProviders;
 import android.content.Intent;
 import android.support.design.widget.FloatingActionButton;
 import android.support.v7.app.AppCompatActivity;
 import android.os.Bundle;
 import android.view.View;
 
+import com.sudokaizen.notepad.database.AppRepository;
 import com.sudokaizen.notepad.viewmodel.MainActivityViewModel;
 
 public class MainActivity extends AppCompatActivity {
 
     private MainActivityViewModel mViewModel;
+    private AppRepository mAppRepository;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -28,10 +31,12 @@ public class MainActivity extends AppCompatActivity {
             }
         });
 
+        mAppRepository = AppRepository.getInstance(MainActivity.this);
         initialiseViewModel();
     }
 
     private void initialiseViewModel() {
-        mViewModel = ViewModelProviders
+        mViewModel = ViewModelProviders.of(MainActivity.this)
+                .get(MainActivityViewModel.class);
     }
 }
