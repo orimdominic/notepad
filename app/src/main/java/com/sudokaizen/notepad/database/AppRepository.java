@@ -23,19 +23,20 @@ public class AppRepository {
     }
 
     private AppRepository(Context context) {
-        instance = new AppRepository(context);
         noteDb = NoteDatabase.getInstance(context);
+        mAppExecutors = new AppExecutors();
     }
 
     public List<NoteEntry> getAllNotes() {
         return noteDb.noteDao().getAllNotes();
     }
 
-    public void addNote(final NoteEntry note){
+    public void insertNote(final NoteEntry note){
         mAppExecutors.diskIO().execute(new Runnable() {
             @Override
             public void run() {
                 noteDb.noteDao().insertNote(note);
+                System.out.println("NoteAdded");
             }
         });
     }
