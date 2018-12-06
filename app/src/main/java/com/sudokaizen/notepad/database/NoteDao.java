@@ -12,7 +12,7 @@ import java.util.List;
 public interface NoteDao {
 
     @Query("SELECT * FROM notes")
-    List<NoteEntry> getAllNotes();
+    LiveData<List<NoteEntry>> getAllNotes();
 
     @Insert(onConflict = OnConflictStrategy.REPLACE)
     void insertNote(NoteEntry note);

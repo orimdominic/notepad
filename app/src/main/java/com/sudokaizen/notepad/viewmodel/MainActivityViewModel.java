@@ -2,6 +2,7 @@ package com.sudokaizen.notepad.viewmodel;
 
 import android.app.Application;
 import android.arch.lifecycle.AndroidViewModel;
+import android.arch.lifecycle.LiveData;
 import android.support.annotation.NonNull;
 
 import com.sudokaizen.notepad.database.AppRepository;
@@ -24,5 +25,9 @@ public class MainActivityViewModel extends AndroidViewModel {
 
     public void insertNote(NoteEntry note){
         mAppRepo.insertNote(note);
+    }
+
+    public LiveData<List<NoteEntry>> getNotes() {
+        return mAppRepo.getAllNotes();
     }
 }
