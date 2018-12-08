@@ -10,21 +10,13 @@ import com.sudokaizen.notepad.database.NoteEntry;
 
 import java.util.List;
 
-public class MainActivityViewModel extends AndroidViewModel {
-
-    private List<NoteEntry> notes;
+public class MainViewModel extends AndroidViewModel {
 
     private AppRepository mAppRepo;
 
-
-
-    public MainActivityViewModel(@NonNull Application application) {
+    public MainViewModel(@NonNull Application application) {
         super(application);
         mAppRepo = AppRepository.getInstance(application.getApplicationContext());
-    }
-
-    public void insertNote(NoteEntry note){
-        mAppRepo.insertNote(note);
     }
 
     public LiveData<List<NoteEntry>> getNotes() {

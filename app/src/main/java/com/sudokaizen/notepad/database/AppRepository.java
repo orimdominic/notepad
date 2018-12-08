@@ -40,7 +40,7 @@ public class AppRepository {
         });
     }
 
-    public void deleteNote(final NoteEntry note){
+    public void deleteNote(final NoteEntry note) {
         mAppExecutors.diskIO().execute(new Runnable() {
             @Override
             public void run() {
@@ -49,4 +49,7 @@ public class AppRepository {
         });
     }
 
+    public NoteEntry getNoteById(final int noteId) {
+        return noteDb.noteDao().getNoteById(noteId);
+    }
 }

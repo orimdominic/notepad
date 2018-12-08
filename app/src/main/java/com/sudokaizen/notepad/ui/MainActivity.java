@@ -7,29 +7,28 @@ import android.content.Intent;
 import android.support.annotation.NonNull;
 import android.support.annotation.Nullable;
 import android.support.design.widget.FloatingActionButton;
-import android.support.design.widget.Snackbar;
 import android.support.v7.app.AppCompatActivity;
 import android.os.Bundle;
 import android.support.v7.widget.LinearLayoutManager;
 import android.support.v7.widget.RecyclerView;
 import android.support.v7.widget.helper.ItemTouchHelper;
-import android.view.MotionEvent;
 import android.view.View;
 
 import com.sudokaizen.notepad.R;
 import com.sudokaizen.notepad.database.AppRepository;
 import com.sudokaizen.notepad.database.NoteEntry;
-import com.sudokaizen.notepad.viewmodel.MainActivityViewModel;
+import com.sudokaizen.notepad.viewmodel.MainViewModel;
 
 import java.util.List;
 
 public class MainActivity extends AppCompatActivity {
 
-    private MainActivityViewModel mViewModel;
+    private MainViewModel mViewModel;
     private RecyclerView rvNotes;
     LinearLayoutManager rvLayoutManager;
     private NotesAdapter mNotesAdapter;
     private AppRepository mAppRepository;
+    public static final String NOTE_ID = "com.sudokaizen.notepad.ui.MainActivity.NOTE_ID_KEY";
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -71,7 +70,7 @@ public class MainActivity extends AppCompatActivity {
     private void setupViewModel() {
 
         mViewModel = ViewModelProviders.of(MainActivity.this)
-                .get(MainActivityViewModel.class);
+                .get(MainViewModel.class);
         mViewModel.getNotes().observe(MainActivity.this, new Observer<List<NoteEntry>>() {
             @Override
             public void onChanged(@Nullable List<NoteEntry> noteEntries) {
