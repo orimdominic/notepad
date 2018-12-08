@@ -4,6 +4,9 @@ import android.arch.persistence.room.Entity;
 import android.arch.persistence.room.Ignore;
 import android.arch.persistence.room.PrimaryKey;
 
+import java.text.SimpleDateFormat;
+import java.util.Date;
+
 @Entity(tableName = "notes")
 public class NoteEntry {
     @PrimaryKey(autoGenerate = true)
@@ -43,5 +46,10 @@ public class NoteEntry {
 
     public void setTimestamp(long timestamp) {
         this.timestamp = timestamp;
+    }
+
+    public String getDateString(){
+        SimpleDateFormat stringFormat = new SimpleDateFormat("EEE, MMM d, h:mm a");
+        return stringFormat.format(new Date(this.timestamp));
     }
 }

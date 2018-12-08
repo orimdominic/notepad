@@ -7,6 +7,7 @@
     android:padding="8dp">
 
     <android.support.design.card.MaterialCardView
+        android:id="@+id/card_view_note"
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
         app:cardCornerRadius="8dp"
@@ -26,6 +27,7 @@
 
 
             <TextView
+                android:id="@+id/tv_note_content"
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
                 android:ellipsize="end"
@@ -34,6 +36,7 @@
                 tools:text="@string/sample_note" />
 
             <TextView
+                android:id="@+id/tv_note_date_time"
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
                 android:layout_gravity="end"

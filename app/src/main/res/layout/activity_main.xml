@@ -11,7 +11,7 @@
         android:id="@+id/rv_main_notes"
         android:layout_width="match_parent"
         android:layout_height="match_parent"
-        tools:listitem="@layout/list_notes" />
+        tools:listitem="@layout/item_note" />
 
     <android.support.design.widget.FloatingActionButton
         android:id="@+id/fab"

@@ -25,6 +25,7 @@ public class MainActivity extends AppCompatActivity {
     private MainActivityViewModel mViewModel;
     private RecyclerView rvNotes;
     LinearLayoutManager rvLayoutManager;
+    private NotesAdapter mNotesAdapter;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -55,9 +56,16 @@ public class MainActivity extends AppCompatActivity {
         mViewModel.getNotes().observe(MainActivity.this, new Observer<List<NoteEntry>>() {
             @Override
             public void onChanged(@Nullable List<NoteEntry> noteEntries) {
-
+                if (noteEntries.size() == 0) {
+                    // TODO: 08-Dec-18 Display empty view for RecyclerView  and hide RecyclerView
+                }else {
+                    mNotesAdapter = new NotesAdapter(MainActivity.this, noteEntries);
+                    mNotesAdapter.notifyDataSetChanged();
+                    rvNotes.setAdapter(mNotesAdapter);
+                }
             }
         });
     }
+
 
 }
