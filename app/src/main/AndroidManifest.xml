@@ -9,7 +9,7 @@
         android:roundIcon="@mipmap/ic_launcher_round"
         android:supportsRtl="true"
         android:theme="@style/AppTheme">
-        <activity android:name=".MainActivity">
+        <activity android:name=".ui.MainActivity">
             <intent-filter>
                 <action android:name="android.intent.action.MAIN" />
 
@@ -17,13 +17,13 @@
             </intent-filter>
         </activity>
         <activity
-            android:name=".CreateNoteActivity"
+            android:name=".ui.CreateNoteActivity"
             android:label="@string/title_activity_create_note"
-            android:parentActivityName=".MainActivity"
+            android:parentActivityName=".ui.MainActivity"
             android:theme="@style/AppTheme.DarkActionBar">
             <meta-data
                 android:name="android.support.PARENT_ACTIVITY"
-                android:value="com.sudokaizen.notepad.MainActivity" />
+                android:value="com.sudokaizen.notepad.ui.MainActivity" />
         </activity>
     </application>
 

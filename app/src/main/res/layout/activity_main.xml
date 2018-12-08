@@ -4,13 +4,13 @@
     xmlns:tools="http://schemas.android.com/tools"
     android:layout_width="match_parent"
     android:layout_height="match_parent"
-    tools:context=".MainActivity"
+    tools:context=".ui.MainActivity"
     android:id="@+id/layout_activity_main">
 
     <android.support.v7.widget.RecyclerView
+        android:id="@+id/rv_main_notes"
         android:layout_width="match_parent"
         android:layout_height="match_parent"
-        android:layout_margin="16dp"
         tools:listitem="@layout/list_notes" />
 
     <android.support.design.widget.FloatingActionButton

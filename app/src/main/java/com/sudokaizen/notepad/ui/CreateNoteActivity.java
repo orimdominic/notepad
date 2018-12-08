@@ -1,17 +1,15 @@
-package com.sudokaizen.notepad;
+package com.sudokaizen.notepad.ui;
 
 import android.annotation.TargetApi;
 import android.os.Build;
 import android.os.Bundle;
-import android.app.Activity;
 import android.support.annotation.RequiresApi;
-import android.support.design.widget.AppBarLayout;
 import android.support.design.widget.TextInputEditText;
 import android.support.design.widget.TextInputLayout;
 import android.support.v7.app.AppCompatActivity;
-import android.support.v7.widget.Toolbar;
 import android.widget.Toast;
 
+import com.sudokaizen.notepad.R;
 import com.sudokaizen.notepad.database.AppRepository;
 import com.sudokaizen.notepad.database.NoteEntry;
 
