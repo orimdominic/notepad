@@ -38,12 +38,17 @@ public class NotesAdapter extends RecyclerView.Adapter<NotesAdapter.NoteViewHold
 
         noteViewHolder.tvContent.setText(note.getContent());
         noteViewHolder.tvDateTime.setText(note.getDateString());
-//        noteViewHolder.cvNote.setStrokeColor(getRandomColor());
+//        noteViewHolder.cvNote.setStrokeColor(getRandomColor())
     }
 
     @Override
     public int getItemCount() {
         return mNoteEntries != null ? mNoteEntries.size() : 0;
+    }
+
+
+    public NoteEntry getItemAt(int position) {
+        return mNoteEntries.get(position);
     }
 
 //    private int getRandomColor(){
@@ -80,9 +85,9 @@ public class NotesAdapter extends RecyclerView.Adapter<NotesAdapter.NoteViewHold
 
         public NoteViewHolder(@NonNull View itemView) {
             super(itemView);
-            cvNote =itemView.findViewById(R.id.card_view_note);
-            tvContent =itemView.findViewById(R.id.tv_note_content);
-            tvDateTime =itemView.findViewById(R.id.tv_note_date_time);
+            cvNote = itemView.findViewById(R.id.card_view_note);
+            tvContent = itemView.findViewById(R.id.tv_note_content);
+            tvDateTime = itemView.findViewById(R.id.tv_note_date_time);
         }
     }
 

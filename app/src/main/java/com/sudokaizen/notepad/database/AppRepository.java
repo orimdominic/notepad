@@ -32,11 +32,19 @@ public class AppRepository {
     }
 
     public void insertNote(final NoteEntry note) {
-
         mAppExecutors.diskIO().execute(new Runnable() {
             @Override
             public void run() {
                 noteDb.noteDao().insertNote(note);
+            }
+        });
+    }
+
+    public void deleteNote(final NoteEntry note){
+        mAppExecutors.diskIO().execute(new Runnable() {
+            @Override
+            public void run() {
+                noteDb.noteDao().deleteNote(note);
             }
         });
     }

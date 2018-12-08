@@ -4,6 +4,7 @@ package com.sudokaizen.notepad.ui;
 import android.arch.lifecycle.Observer;
 import android.arch.lifecycle.ViewModelProviders;
 import android.content.Intent;
+import android.support.annotation.NonNull;
 import android.support.annotation.Nullable;
 import android.support.design.widget.FloatingActionButton;
 import android.support.design.widget.Snackbar;
@@ -11,6 +12,8 @@ import android.support.v7.app.AppCompatActivity;
 import android.os.Bundle;
 import android.support.v7.widget.LinearLayoutManager;
 import android.support.v7.widget.RecyclerView;
+import android.support.v7.widget.helper.ItemTouchHelper;
+import android.view.MotionEvent;
 import android.view.View;
 
 import com.sudokaizen.notepad.R;
@@ -26,12 +29,14 @@ public class MainActivity extends AppCompatActivity {
     private RecyclerView rvNotes;
     LinearLayoutManager rvLayoutManager;
     private NotesAdapter mNotesAdapter;
+    private AppRepository mAppRepository;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_main);
 
+        mAppRepository = AppRepository.getInstance(MainActivity.this);
         FloatingActionButton fab = findViewById(R.id.fab);
         rvNotes = findViewById(R.id.rv_main_notes);
         rvLayoutManager =
@@ -39,6 +44,20 @@ public class MainActivity extends AppCompatActivity {
                         LinearLayoutManager.VERTICAL, false);
         rvNotes.setLayoutManager(rvLayoutManager);
 
+        new ItemTouchHelper(new ItemTouchHelper.SimpleCallback(0, ItemTouchHelper.LEFT | ItemTouchHelper.RIGHT) {
+            @Override
+            public boolean onMove(@NonNull RecyclerView recyclerView, @NonNull RecyclerView.ViewHolder viewHolder, @NonNull RecyclerView.ViewHolder viewHolder1) {
+                return false;
+            }
+
+            @Override
+            public void onSwiped(@NonNull RecyclerView.ViewHolder viewHolder, int i) {
+                int notePosition = viewHolder.getAdapterPosition();
+                NoteEntry noteToDelete = mNotesAdapter.getItemAt(notePosition);
+                System.out.println("Note content is " + noteToDelete.getContent());
+                mAppRepository.deleteNote(noteToDelete);
+            }
+        }).attachToRecyclerView(rvNotes);
         fab.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View view) {
@@ -58,7 +77,7 @@ public class MainActivity extends AppCompatActivity {
             public void onChanged(@Nullable List<NoteEntry> noteEntries) {
                 if (noteEntries.size() == 0) {
                     // TODO: 08-Dec-18 Display empty view for RecyclerView  and hide RecyclerView
-                }else {
+                } else {
                     mNotesAdapter = new NotesAdapter(MainActivity.this, noteEntries);
                     mNotesAdapter.notifyDataSetChanged();
                     rvNotes.setAdapter(mNotesAdapter);
