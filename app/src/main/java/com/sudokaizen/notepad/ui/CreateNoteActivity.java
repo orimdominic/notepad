@@ -35,25 +35,34 @@ public class CreateNoteActivity extends AppCompatActivity {
         // Who is deceiving me now? App or Lint? Or you?
         til.setBoxStrokeColor(android.R.color.transparent);
     }
-
-    // Note-To-Self: save note on back button pressed.. Easier, more intuitive
-    // for the user than button
+    //
+    //    // Note-To-Self: save note on back button pressed.. Easier, more intuitive
+    //    // for the user than button
 
 
     @Override
-    public void onBackPressed() {
+    protected void onPause() {
+        saveNote();
+        super.onPause();
+    }
 
+    private void saveNote() {
         if (etNote.getText().length() == 0) {
             Toast.makeText(CreateNoteActivity.this, "You didn't add any note", Toast.LENGTH_SHORT)
                     .show();
-        }else {
-            Toast.makeText(CreateNoteActivity.this, etNote.getText(), Toast.LENGTH_SHORT)
+        } else {
+            Toast.makeText(CreateNoteActivity.this, "Note saved", Toast.LENGTH_SHORT)
                     .show();
-            NoteEntry noteEntry  = new NoteEntry();
+            NoteEntry noteEntry = new NoteEntry();
             noteEntry.setContent(etNote.getText().toString());
             noteEntry.setTimestamp(System.currentTimeMillis());
             mAppRepository.insertNote(noteEntry);
         }
+    }
+
+    @Override
+    public void onBackPressed() {
+        saveNote();
         finish();
 
     }
