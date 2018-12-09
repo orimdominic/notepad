@@ -7,9 +7,10 @@
     android:id="@+id/card_view_note"
     android:layout_width="match_parent"
     android:layout_height="wrap_content"
-    android:orientation="vertical"
     android:layout_marginTop="8dp"
-    app:cardCornerRadius="8dp">
+    android:orientation="vertical"
+    app:cardCornerRadius="8dp"
+    app:cardElevation="0dp">
 
 
     <LinearLayout
