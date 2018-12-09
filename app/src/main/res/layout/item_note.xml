@@ -1,51 +1,51 @@
 <?xml version="1.0" encoding="utf-8"?>
-<android.support.constraint.ConstraintLayout xmlns:android="http://schemas.android.com/apk/res/android"
+
+
+<android.support.design.card.MaterialCardView xmlns:android="http://schemas.android.com/apk/res/android"
     xmlns:app="http://schemas.android.com/apk/res-auto"
     xmlns:tools="http://schemas.android.com/tools"
+    android:id="@+id/card_view_note"
     android:layout_width="match_parent"
     android:layout_height="wrap_content"
-    android:padding="8dp">
+    android:orientation="vertical"
+    android:layout_marginTop="8dp"
+    app:cardCornerRadius="8dp">
 
-    <android.support.design.card.MaterialCardView
-        android:id="@+id/card_view_note"
+
+    <LinearLayout
         android:layout_width="match_parent"
-        android:layout_height="wrap_content"
-        app:cardCornerRadius="8dp"
-        app:layout_constraintBottom_toBottomOf="parent"
-        app:layout_constraintEnd_toEndOf="parent"
-        app:layout_constraintStart_toStartOf="parent"
-        app:layout_constraintTop_toTopOf="parent"
-        app:strokeColor="@android:color/holo_orange_dark"
-        app:strokeWidth="2dp">
+        android:layout_height="match_parent"
+        android:background="@drawable/bgnd_note"
+        android:orientation="vertical">
 
 
-        <LinearLayout
+        <TextView
+            android:id="@+id/tv_note_content"
             android:layout_width="match_parent"
-            android:layout_height="match_parent"
-            android:layout_margin="8dp"
-            android:orientation="vertical">
+            android:layout_height="wrap_content"
+            android:layout_marginStart="16dp"
+            android:layout_marginTop="16dp"
+            android:layout_marginEnd="16dp"
+            android:background="@android:color/transparent"
+            android:ellipsize="end"
+            android:lineSpacingMultiplier="1.25"
+            android:maxLines="5"
+            tools:text="@string/sample_note" />
+
+        <TextView
+            android:id="@+id/tv_note_date_time"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_gravity="end"
+            android:layout_marginStart="16dp"
+            android:layout_marginTop="16dp"
+            android:layout_marginEnd="16dp"
+            android:layout_marginBottom="16dp"
+            android:background="@android:color/transparent"
+            android:textStyle="bold"
+            tools:text="@string/sample_date" />
+    </LinearLayout>
 
 
-            <TextView
-                android:id="@+id/tv_note_content"
-                android:layout_width="match_parent"
-                android:layout_height="wrap_content"
-                android:ellipsize="end"
-                android:lineSpacingMultiplier="1.25"
-                android:maxLines="5"
-                tools:text="@string/sample_note" />
-
-            <TextView
-                android:id="@+id/tv_note_date_time"
-                android:layout_width="wrap_content"
-                android:layout_height="wrap_content"
-                android:layout_gravity="end"
-                android:layout_marginTop="8dp"
-                android:textStyle="bold"
-                tools:text="@string/sample_date" />
-        </LinearLayout>
-
-
-    </android.support.design.card.MaterialCardView>
-</android.support.constraint.ConstraintLayout>
+</android.support.design.card.MaterialCardView>
 
