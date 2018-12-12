@@ -14,15 +14,19 @@ import com.google.android.gms.common.SignInButton;
 import com.google.android.gms.common.api.ApiException;
 import com.google.android.gms.tasks.Task;
 import com.sudokaizen.notepad.R;
+import com.sudokaizen.notepad.database.UserEntity;
+import com.sudokaizen.notepad.database.UserRepository;
 
 public class SignInActivity extends AppCompatActivity {
 
     private static final int RC_SIGN_IN = 123;
+    private UserRepository mUserRepository;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_sign_in);
+        mUserRepository = UserRepository.getInstance(this);
 
         // Configure sign-in to request the user's ID, email address, and basic
         // profile. ID and basic profile are included in DEFAULT_SIGN_IN.
@@ -70,15 +74,14 @@ public class SignInActivity extends AppCompatActivity {
     private void handleSignInResult(Task<GoogleSignInAccount> completedTask) {
         try {
             GoogleSignInAccount account = completedTask.getResult(ApiException.class);
-            account.getEmail();
+            UserEntity user = new UserEntity(account.getEmail(), account.getDisplayName());
+            mUserRepository.insertUser(user);
             Log.d("SignInActivity", "email " + account.getEmail());
             // Signed in successfully, show authenticated UI.
-//            updateUI(account);
         } catch (ApiException e) {
             // The ApiException status code indicates the detailed failure reason.
             // Please refer to the GoogleSignInStatusCodes class reference for more information.
             Log.w("SignInActivity", "signInResult:failed code=" + e.getStatusCode());
-//            updateUI(null);
         }
     }
 }

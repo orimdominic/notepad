@@ -6,19 +6,19 @@ import android.arch.lifecycle.MutableLiveData;
 import android.support.annotation.NonNull;
 
 import com.sudokaizen.notepad.AppExecutors;
-import com.sudokaizen.notepad.database.AppRepository;
+import com.sudokaizen.notepad.database.NoteRepository;
 import com.sudokaizen.notepad.database.NoteEntry;
 
 public class CreateNoteViewModel extends AndroidViewModel {
 
-    private AppRepository appRepo;
+    private NoteRepository appRepo;
     private AppExecutors mAppExecutors;
     public MutableLiveData<NoteEntry> mLiveNote =
             new MutableLiveData<>();
 
     public CreateNoteViewModel(@NonNull Application application) {
         super(application);
-        appRepo = AppRepository.getInstance(application.getApplicationContext());
+        appRepo = NoteRepository.getInstance(application.getApplicationContext());
         mAppExecutors = new AppExecutors();
     }
 

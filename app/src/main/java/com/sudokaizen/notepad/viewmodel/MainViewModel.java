@@ -5,18 +5,18 @@ import android.arch.lifecycle.AndroidViewModel;
 import android.arch.lifecycle.LiveData;
 import android.support.annotation.NonNull;
 
-import com.sudokaizen.notepad.database.AppRepository;
+import com.sudokaizen.notepad.database.NoteRepository;
 import com.sudokaizen.notepad.database.NoteEntry;
 
 import java.util.List;
 
 public class MainViewModel extends AndroidViewModel {
 
-    private AppRepository mAppRepo;
+    private NoteRepository mAppRepo;
 
     public MainViewModel(@NonNull Application application) {
         super(application);
-        mAppRepo = AppRepository.getInstance(application.getApplicationContext());
+        mAppRepo = NoteRepository.getInstance(application.getApplicationContext());
     }
 
     public LiveData<List<NoteEntry>> getNotes() {

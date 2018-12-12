@@ -10,7 +10,7 @@ import android.support.v7.app.AppCompatActivity;
 import android.widget.Toast;
 
 import com.sudokaizen.notepad.R;
-import com.sudokaizen.notepad.database.AppRepository;
+import com.sudokaizen.notepad.database.NoteRepository;
 import com.sudokaizen.notepad.database.NoteEntry;
 import com.sudokaizen.notepad.viewmodel.CreateNoteViewModel;
 
@@ -18,7 +18,7 @@ import static com.sudokaizen.notepad.ui.MainActivity.NOTE_ID;
 
 public class CreateNoteActivity extends AppCompatActivity {
 
-    private AppRepository mAppRepository;
+    private NoteRepository mNoteRepository;
     private TextInputEditText etNote;
     private boolean isNewNote;
     private int editNoteId;
@@ -33,7 +33,7 @@ public class CreateNoteActivity extends AppCompatActivity {
         til.setBoxStrokeColor(android.R.color.transparent);
 
         etNote = findViewById(R.id.et_create_note);
-        mAppRepository = AppRepository.getInstance(CreateNoteActivity.this);
+        mNoteRepository = NoteRepository.getInstance(CreateNoteActivity.this);
         setupViewModel();
     }
 
@@ -80,7 +80,7 @@ public class CreateNoteActivity extends AppCompatActivity {
     }
 
     private void saveNote(NoteEntry noteEntry, String toastMsg) {
-        mAppRepository.insertNote(noteEntry);
+        mNoteRepository.insertNote(noteEntry);
         Toast.makeText(CreateNoteActivity.this, toastMsg, Toast.LENGTH_SHORT)
                 .show();
     }

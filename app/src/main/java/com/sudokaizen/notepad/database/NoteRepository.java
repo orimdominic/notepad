@@ -7,35 +7,35 @@ import com.sudokaizen.notepad.AppExecutors;
 
 import java.util.List;
 
-public class AppRepository {
+public class NoteRepository {
 
-    private static AppRepository instance;
-    private NoteDatabase noteDb;
+    private static NoteRepository instance;
+    private AppDatabase appDb;
 
     private AppExecutors mAppExecutors;
 
-    public static AppRepository getInstance(Context context) {
+    public static NoteRepository getInstance(Context context) {
         if (instance == null) {
-            instance = new AppRepository(context);
+            instance = new NoteRepository(context);
         }
 
         return instance;
     }
 
-    private AppRepository(Context context) {
-        noteDb = NoteDatabase.getInstance(context);
+    private NoteRepository(Context context) {
+        appDb = AppDatabase.getInstance(context);
         mAppExecutors = new AppExecutors();
     }
 
     public LiveData<List<NoteEntry>> getAllNotes() {
-        return noteDb.noteDao().getAllNotes();
+        return appDb.noteDao().getAllNotes();
     }
 
     public void insertNote(final NoteEntry note) {
         mAppExecutors.diskIO().execute(new Runnable() {
             @Override
             public void run() {
-                noteDb.noteDao().insertNote(note);
+                appDb.noteDao().insertNote(note);
             }
         });
     }
@@ -44,12 +44,12 @@ public class AppRepository {
         mAppExecutors.diskIO().execute(new Runnable() {
             @Override
             public void run() {
-                noteDb.noteDao().deleteNote(note);
+                appDb.noteDao().deleteNote(note);
             }
         });
     }
 
     public NoteEntry getNoteById(final int noteId) {
-        return noteDb.noteDao().getNoteById(noteId);
+        return appDb.noteDao().getNoteById(noteId);
     }
 }

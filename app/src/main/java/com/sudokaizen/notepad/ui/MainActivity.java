@@ -20,7 +20,7 @@ import android.view.View;
 import android.widget.Toast;
 
 import com.sudokaizen.notepad.R;
-import com.sudokaizen.notepad.database.AppRepository;
+import com.sudokaizen.notepad.database.NoteRepository;
 import com.sudokaizen.notepad.database.NoteEntry;
 import com.sudokaizen.notepad.viewmodel.MainViewModel;
 
@@ -32,7 +32,7 @@ public class MainActivity extends AppCompatActivity {
     private RecyclerView rvNotes;
     LinearLayoutManager rvLayoutManager;
     private NotesAdapter mNotesAdapter;
-    private AppRepository mAppRepository;
+    private NoteRepository mNoteRepository;
 
     public static final String NOTE_ID = "com.sudokaizen.notepad.ui.MainActivity.NOTE_ID_KEY";
 
@@ -41,7 +41,7 @@ public class MainActivity extends AppCompatActivity {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_main);
 
-        mAppRepository = AppRepository.getInstance(MainActivity.this);
+        mNoteRepository = NoteRepository.getInstance(MainActivity.this);
         FloatingActionButton fab = findViewById(R.id.fab);
         rvNotes = findViewById(R.id.rv_main_notes);
         rvLayoutManager =
@@ -118,7 +118,7 @@ public class MainActivity extends AppCompatActivity {
     private void deleteFragrances(int notePosition) {
         NoteEntry noteToDelete = mNotesAdapter.getItemAt(notePosition);
         System.out.println("Note content is " + noteToDelete.getContent());
-        mAppRepository.deleteNote(noteToDelete);
+        mNoteRepository.deleteNote(noteToDelete);
         Toast.makeText(this, "Note deleted", Toast.LENGTH_SHORT).show();
     }
 

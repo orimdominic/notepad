@@ -12,8 +12,8 @@ public interface UserDao {
     void insertUser(UserEntity user);
 
     @Query("SELECT * FROM users WHERE id = :id")
-    LiveData<UserEntity> getUser(String id);
+    UserEntity getUserById(String id);
 
     @Query("DELETE FROM users WHERE id = :id")
-    void deleteUser(String id);
+    void deleteUserById(String id);
 }
