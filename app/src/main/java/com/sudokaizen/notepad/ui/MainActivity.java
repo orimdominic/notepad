@@ -5,16 +5,19 @@ package com.sudokaizen.notepad.ui;
 
 import android.arch.lifecycle.Observer;
 import android.arch.lifecycle.ViewModelProviders;
+import android.content.DialogInterface;
 import android.content.Intent;
 import android.support.annotation.NonNull;
 import android.support.annotation.Nullable;
 import android.support.design.widget.FloatingActionButton;
+import android.support.v7.app.AlertDialog;
 import android.support.v7.app.AppCompatActivity;
 import android.os.Bundle;
 import android.support.v7.widget.LinearLayoutManager;
 import android.support.v7.widget.RecyclerView;
 import android.support.v7.widget.helper.ItemTouchHelper;
 import android.view.View;
+import android.widget.Toast;
 
 import com.sudokaizen.notepad.R;
 import com.sudokaizen.notepad.database.AppRepository;
@@ -55,10 +58,9 @@ public class MainActivity extends AppCompatActivity {
             @Override
             public void onSwiped(@NonNull RecyclerView.ViewHolder viewHolder, int i) {
                 int notePosition = viewHolder.getAdapterPosition();
-                NoteEntry noteToDelete = mNotesAdapter.getItemAt(notePosition);
-                System.out.println("Note content is " + noteToDelete.getContent());
-                mAppRepository.deleteNote(noteToDelete);
+                showDeleteConfirmationDialog(notePosition);
             }
+
         }).attachToRecyclerView(rvNotes);
         fab.setOnClickListener(new View.OnClickListener() {
             @Override
@@ -88,5 +90,36 @@ public class MainActivity extends AppCompatActivity {
         });
     }
 
+
+    private void showDeleteConfirmationDialog(final int notePosition) {
+
+        String message = "Do you want to delete this note?";
+        AlertDialog.Builder builder = new AlertDialog.Builder(this);
+        builder.setMessage(message);
+        builder.setPositiveButton("Delete", new DialogInterface.OnClickListener() {
+            @Override
+            public void onClick(DialogInterface dialogInterface, int i) {
+                deleteFragrances(notePosition);
+            }
+        });
+        builder.setNegativeButton("Cancel", new DialogInterface.OnClickListener() {
+            @Override
+            public void onClick(DialogInterface dialogInterface, int i) {
+                mNotesAdapter.notifyDataSetChanged();
+                dialogInterface.dismiss();
+            }
+        });
+
+        // Create and show the AlertDialog
+        AlertDialog alertDialog = builder.create();
+        alertDialog.show();
+    }
+
+    private void deleteFragrances(int notePosition) {
+        NoteEntry noteToDelete = mNotesAdapter.getItemAt(notePosition);
+        System.out.println("Note content is " + noteToDelete.getContent());
+        mAppRepository.deleteNote(noteToDelete);
+        Toast.makeText(this, "Note deleted", Toast.LENGTH_SHORT).show();
+    }
 
 }
