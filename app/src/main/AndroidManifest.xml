@@ -32,7 +32,8 @@
                 android:name="android.support.PARENT_ACTIVITY"
                 android:value="com.sudokaizen.notepad.ui.MainActivity" />
         </activity>
-        <activity android:name=".ui.SignInActivity">
+        <activity android:name=".ui.SignInActivity"
+            android:theme="@style/AppTheme.DarkActionBar">
             <intent-filter>
                 <action android:name="android.intent.action.MAIN" />
 
