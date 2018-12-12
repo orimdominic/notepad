@@ -49,6 +49,15 @@ public class NoteRepository {
         });
     }
 
+    public void deleteAllNotes(){
+        mAppExecutors.diskIO().execute(new Runnable() {
+            @Override
+            public void run() {
+                appDb.noteDao().deleteAllNotes();
+            }
+        });
+    }
+
     public NoteEntry getNoteById(final int noteId) {
         return appDb.noteDao().getNoteById(noteId);
     }
