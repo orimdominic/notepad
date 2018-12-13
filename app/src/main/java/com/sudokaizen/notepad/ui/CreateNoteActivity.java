@@ -95,6 +95,5 @@ public class CreateNoteActivity extends AppCompatActivity {
     public void onBackPressed() {
 //        onCompleteAction();
         finish();
-
     }
 }

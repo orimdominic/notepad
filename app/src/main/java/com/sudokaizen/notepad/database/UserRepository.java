@@ -44,4 +44,12 @@ public class UserRepository {
         });
     }
 
+    public void deleteAllUsers() {
+        mAppExecutors.diskIO().execute(new Runnable() {
+            @Override
+            public void run() {
+                appDb.userDao().deleteAllUsers();
+            }
+        });
+    }
 }
