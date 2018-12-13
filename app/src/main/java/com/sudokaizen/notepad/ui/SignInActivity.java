@@ -15,6 +15,7 @@ import com.google.android.gms.common.SignInButton;
 import com.google.android.gms.common.api.ApiException;
 import com.google.android.gms.tasks.Task;
 import com.sudokaizen.notepad.R;
+import com.sudokaizen.notepad.database.NoteRepository;
 import com.sudokaizen.notepad.database.UserEntity;
 import com.sudokaizen.notepad.database.UserRepository;
 
@@ -22,12 +23,14 @@ public class SignInActivity extends AppCompatActivity {
 
     private static final int RC_SIGN_IN = 123;
     private UserRepository mUserRepository;
+    private NoteRepository mNoteRepository;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_sign_in);
         mUserRepository = UserRepository.getInstance(this);
+        mNoteRepository = NoteRepository.getInstance(this);
 
         // Configure sign-in to request the user's ID, email address, and basic
         // profile. ID and basic profile are included in DEFAULT_SIGN_IN.
@@ -40,6 +43,7 @@ public class SignInActivity extends AppCompatActivity {
         signInButton.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View view) {
+                System.out.println("SignInButton clicked");
                 Intent signInIntent = mGoogleSignInClient.getSignInIntent();
                 startActivityForResult(signInIntent, RC_SIGN_IN);
             }
@@ -76,17 +80,30 @@ public class SignInActivity extends AppCompatActivity {
         try {
             GoogleSignInAccount account = completedTask.getResult(ApiException.class);
             UserEntity user = new UserEntity(account.getEmail(), account.getDisplayName());
-            mUserRepository.insertUser(user);
+            if (!isFormerUser(user)) {
+                mUserRepository.deleteAllUsers();
+                mUserRepository.insertUser(user);
+                mNoteRepository.deleteAllNotes();
+            }
+            startActivity(new Intent(SignInActivity.this, MainActivity.class));
+            finish();
+
             Log.d("SignInActivity", "email " + account.getEmail());
             // Signed in successfully, show authenticated UI.
         } catch (ApiException e) {
             // The ApiException status code indicates the detailed failure reason.
             // Please refer to the GoogleSignInStatusCodes class reference for more information.
             Log.w("SignInActivity", "signInResult:failed code=" + e.getStatusCode());
-            if (e.getStatusCode() == 7){
+            if (e.getStatusCode() == 7) {
                 Toast.makeText(this, "Sign in failed. No internet connection", Toast.LENGTH_SHORT)
                         .show();
             }
         }
     }
+
+    private boolean isFormerUser(UserEntity newUser) {
+        UserEntity formerUser = mUserRepository.getUser().getValue();
+        return formerUser == null||formerUser.getId().equals(newUser.getId()) ;
+    }
+
 }

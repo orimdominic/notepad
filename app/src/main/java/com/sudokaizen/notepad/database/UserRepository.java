@@ -1,5 +1,7 @@
 package com.sudokaizen.notepad.database;
 
+import android.arch.lifecycle.LiveData;
+import android.arch.lifecycle.MutableLiveData;
 import android.content.Context;
 
 import com.sudokaizen.notepad.AppExecutors;
@@ -9,6 +11,8 @@ public class UserRepository {
     private static UserRepository instance;
     private AppDatabase appDb;
     private AppExecutors mAppExecutors;
+    private MutableLiveData<UserEntity> mUser = new MutableLiveData<>();
+    UserEntity user;
 
     public UserRepository(Context context) {
         appDb = AppDatabase.getInstance(context);
@@ -31,11 +35,17 @@ public class UserRepository {
         });
     }
 
-    public UserEntity getUser(UserEntity user) {
-        return appDb.userDao().getUserById(user.getId());
+    public LiveData<UserEntity> getUser() {
+        mAppExecutors.diskIO().execute(new Runnable() {
+            @Override
+            public void run() {
+                mUser.postValue(appDb.userDao().getUser());
+            }
+        });
+        return mUser;
     }
 
-    public void deleteUser(final UserEntity user){
+    public void deleteUser(final UserEntity user) {
         mAppExecutors.diskIO().execute(new Runnable() {
             @Override
             public void run() {

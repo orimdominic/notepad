@@ -10,8 +10,8 @@ public interface UserDao {
     @Insert
     void insertUser(UserEntity user);
 
-    @Query("SELECT * FROM users WHERE id = :id")
-    UserEntity getUserById(String id);
+    @Query("SELECT * FROM users")
+    UserEntity getUser();
 
     @Query("DELETE FROM users WHERE id = :id")
     void deleteUserById(String id);
