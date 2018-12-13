@@ -1,7 +1,5 @@
 package com.sudokaizen.notepad.ui;
 
-// Client id  292181038809-l49bdspb7au9n8690ubpmoetn1uvf79e.apps.googleusercontent.com
-// Client secret  AuQdzCsklaaswshLSsGwo0tH
 
 import android.arch.lifecycle.Observer;
 import android.arch.lifecycle.ViewModelProviders;
