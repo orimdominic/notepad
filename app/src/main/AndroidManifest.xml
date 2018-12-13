@@ -14,20 +14,21 @@
         android:roundIcon="@mipmap/ic_launcher_round"
         android:supportsRtl="true"
         android:theme="@style/AppTheme">
-        <activity android:name=".ui.MainActivity">
+        <activity android:name=".ui.MainActivity"
+            android:theme="@style/AppTheme.Light.DarkActionBar">
 
         </activity>
         <activity
             android:name=".ui.CreateNoteActivity"
             android:label="@string/title_activity_create_note"
             android:parentActivityName=".ui.MainActivity"
-            android:theme="@style/AppTheme.DarkActionBar">
+            android:theme="@style/AppTheme.Light.DarkActionBar">
             <meta-data
                 android:name="android.support.PARENT_ACTIVITY"
                 android:value="com.sudokaizen.notepad.ui.MainActivity" />
         </activity>
         <activity android:name=".ui.SignInActivity"
-            android:theme="@style/AppTheme.NoActionBar">
+            android:theme="@style/AppTheme.Light.NoActionBar">
             <intent-filter>
                 <action android:name="android.intent.action.MAIN" />
 
