@@ -31,7 +31,7 @@ public class SignInActivity extends AppCompatActivity {
         setContentView(R.layout.activity_sign_in);
         mUserRepository = UserRepository.getInstance(this);
         mNoteRepository = NoteRepository.getInstance(this);
-
+        System.out.println("Check created");
         // Configure sign-in to request the user's ID, email address, and basic
         // profile. ID and basic profile are included in DEFAULT_SIGN_IN.
         GoogleSignInOptions gso = new GoogleSignInOptions.Builder(GoogleSignInOptions.DEFAULT_SIGN_IN)
@@ -43,7 +43,7 @@ public class SignInActivity extends AppCompatActivity {
         signInButton.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View view) {
-                System.out.println("SignInButton clicked");
+                System.out.println("Check signInButton clicked");
                 Intent signInIntent = mGoogleSignInClient.getSignInIntent();
                 startActivityForResult(signInIntent, RC_SIGN_IN);
             }
@@ -66,11 +66,12 @@ public class SignInActivity extends AppCompatActivity {
     @Override
     public void onActivityResult(int requestCode, int resultCode, Intent data) {
         super.onActivityResult(requestCode, resultCode, data);
-
+        System.out.println("Check onActivityResult running");
         // Result returned from launching the Intent from GoogleSignInClient.getSignInIntent(...);
         if (requestCode == RC_SIGN_IN) {
             // The Task returned from this call is always completed, no need to attach
             // a listener.
+            System.out.println("Check onActivityResult requestCode == RC_SIGN_IN");
             Task<GoogleSignInAccount> task = GoogleSignIn.getSignedInAccountFromIntent(data);
             handleSignInResult(task);
         }
@@ -85,7 +86,9 @@ public class SignInActivity extends AppCompatActivity {
                 mUserRepository.deleteAllUsers();
                 mUserRepository.insertUser(user);
                 mNoteRepository.deleteAllNotes();
+                System.out.println("Check onActivityResult inside if");
             }
+            System.out.println("Check onActivityResult after if");
             startActivity(new Intent(SignInActivity.this, MainActivity.class));
             finish();
 
@@ -94,11 +97,11 @@ public class SignInActivity extends AppCompatActivity {
         } catch (ApiException e) {
             // The ApiException status code indicates the detailed failure reason.
             // Please refer to the GoogleSignInStatusCodes class reference for more information.
-            Log.w("SignInActivity", "signInResult:failed code=" + e.getStatusCode());
-            if (e.getStatusCode() == 7) {
-                Toast.makeText(this, "Sign in failed. No internet connection", Toast.LENGTH_SHORT)
+            Log.w("SignInActivity", "signInResult:failed code=" + e.getMessage());
+
+                Toast.makeText(this, "Error! Sign in failed", Toast.LENGTH_SHORT)
                         .show();
-            }
+
         }
     }
 
