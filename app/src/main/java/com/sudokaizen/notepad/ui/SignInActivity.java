@@ -79,6 +79,7 @@ public class SignInActivity extends AppCompatActivity {
     private void handleSignInResult(Task<GoogleSignInAccount> completedTask) {
         try {
             GoogleSignInAccount account = completedTask.getResult(ApiException.class);
+            System.out.println("account "+account.getEmail());
             UserEntity user = new UserEntity(account.getEmail(), account.getDisplayName());
             if (!isFormerUser(user)) {
                 mUserRepository.deleteAllUsers();
