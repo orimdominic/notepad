@@ -80,34 +80,39 @@ public class SignInActivity extends AppCompatActivity {
     private void handleSignInResult(Task<GoogleSignInAccount> completedTask) {
         try {
             GoogleSignInAccount account = completedTask.getResult(ApiException.class);
-            System.out.println("account "+account.getEmail());
+            System.out.println("account " + account.getEmail());
             UserEntity user = new UserEntity(account.getEmail(), account.getDisplayName());
-            if (!isFormerUser(user)) {
-                mUserRepository.deleteAllUsers();
-                mUserRepository.insertUser(user);
-                mNoteRepository.deleteAllNotes();
-                System.out.println("Check onActivityResult inside if");
-            }
-            System.out.println("Check onActivityResult after if");
-            startActivity(new Intent(SignInActivity.this, MainActivity.class));
-            finish();
+            handleSignedInUser(user);
 
-            Log.d("SignInActivity", "email " + account.getEmail());
+
             // Signed in successfully, show authenticated UI.
         } catch (ApiException e) {
             // The ApiException status code indicates the detailed failure reason.
             // Please refer to the GoogleSignInStatusCodes class reference for more information.
             Log.w("SignInActivity", "signInResult:failed code=" + e.getMessage());
 
-                Toast.makeText(this, "Error! Sign in failed", Toast.LENGTH_SHORT)
-                        .show();
+            Toast.makeText(this, "Error! Sign in failed", Toast.LENGTH_SHORT)
+                    .show();
 
         }
     }
 
-    private boolean isFormerUser(UserEntity newUser) {
-        UserEntity formerUser = mUserRepository.getUser().getValue();
-        return formerUser == null||formerUser.getId().equals(newUser.getId()) ;
+    private void handleSignedInUser(final UserEntity newUser) {
+
+        mUserRepository.setUser();
+        UserEntity formerUser = mUserRepository.mUser.getValue();
+
+        if (formerUser != null && formerUser.getId().equals(newUser.getId())) {
+            // do nothing, just sign user in
+        } else if (formerUser == null || !formerUser.getId().equals(newUser.getId())) {
+            mUserRepository.deleteAllUsers();
+            mUserRepository.insertUser(newUser);
+            mNoteRepository.deleteAllNotes();
+            mUserRepository.setUser();
+        }
+        System.out.println("Check onActivityResult after if");
+        startActivity(new Intent(SignInActivity.this, MainActivity.class));
+        finish();
     }
 
 }

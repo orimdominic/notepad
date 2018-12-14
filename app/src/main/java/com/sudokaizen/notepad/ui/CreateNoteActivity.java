@@ -1,5 +1,6 @@
 package com.sudokaizen.notepad.ui;
 
+import android.annotation.SuppressLint;
 import android.arch.lifecycle.Observer;
 import android.arch.lifecycle.ViewModelProviders;
 import android.os.Bundle;
@@ -13,6 +14,8 @@ import android.widget.Toast;
 import com.sudokaizen.notepad.R;
 import com.sudokaizen.notepad.database.NoteRepository;
 import com.sudokaizen.notepad.database.NoteEntry;
+import com.sudokaizen.notepad.database.UserEntity;
+import com.sudokaizen.notepad.database.UserRepository;
 import com.sudokaizen.notepad.viewmodel.CreateNoteViewModel;
 
 import static com.sudokaizen.notepad.ui.MainActivity.NOTE_ID;
@@ -20,11 +23,14 @@ import static com.sudokaizen.notepad.ui.MainActivity.NOTE_ID;
 public class CreateNoteActivity extends AppCompatActivity {
 
     private NoteRepository mNoteRepository;
+    private UserRepository mUserRepository;
     private TextInputEditText etNote;
     private boolean isNewNote;
     private int editNoteId;
+    private String userId;
 
 
+    @SuppressLint("ResourceAsColor")
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
@@ -35,6 +41,7 @@ public class CreateNoteActivity extends AppCompatActivity {
 
         etNote = findViewById(R.id.et_create_note);
         mNoteRepository = NoteRepository.getInstance(CreateNoteActivity.this);
+        mUserRepository = UserRepository.getInstance(CreateNoteActivity.this);
         setupViewModel();
     }
 
@@ -50,6 +57,11 @@ public class CreateNoteActivity extends AppCompatActivity {
                 }
             }
         });
+
+        mUserRepository.setUser();
+        UserEntity user = mUserRepository.mUser.getValue();
+        userId = user.getId();
+        Toast.makeText(this, userId, Toast.LENGTH_SHORT).show();
 
         Bundle extras = getIntent().getExtras();
         if (extras != null) {

@@ -11,8 +11,7 @@ public class UserRepository {
     private static UserRepository instance;
     private AppDatabase appDb;
     private AppExecutors mAppExecutors;
-    private MutableLiveData<UserEntity> mUser = new MutableLiveData<>();
-    UserEntity user;
+    public MutableLiveData<UserEntity> mUser = new MutableLiveData<>();
 
     public UserRepository(Context context) {
         appDb = AppDatabase.getInstance(context);
@@ -35,21 +34,12 @@ public class UserRepository {
         });
     }
 
-    public LiveData<UserEntity> getUser() {
+    public void setUser() {
         mAppExecutors.diskIO().execute(new Runnable() {
             @Override
             public void run() {
-                mUser.postValue(appDb.userDao().getUser());
-            }
-        });
-        return mUser;
-    }
-
-    public void deleteUser(final UserEntity user) {
-        mAppExecutors.diskIO().execute(new Runnable() {
-            @Override
-            public void run() {
-                appDb.userDao().deleteUserById(user.getId());
+                UserEntity user = appDb.userDao().getUser();
+                mUser.postValue(user);
             }
         });
     }

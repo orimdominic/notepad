@@ -16,6 +16,7 @@ public class NoteEntry {
 
     @Ignore
     public NoteEntry() {
+        // Firebase required no-arg constructor
     }
 
     public NoteEntry(int id, String content, long timestamp) {
