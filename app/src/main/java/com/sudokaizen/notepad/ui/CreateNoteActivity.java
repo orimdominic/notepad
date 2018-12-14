@@ -94,7 +94,6 @@ public class CreateNoteActivity extends AppCompatActivity {
 
     @Override
     public void onBackPressed() {
-//        onCompleteAction();
         finish();
     }
 }

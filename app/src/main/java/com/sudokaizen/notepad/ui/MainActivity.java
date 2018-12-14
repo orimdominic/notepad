@@ -97,6 +97,7 @@ public class MainActivity extends AppCompatActivity {
         });
     }
 
+    // TODO: 14-Dec-18 Add settings for user to sort code by their choice criterion
 
     private void showDeleteConfirmationDialog(final int notePosition) {
 
