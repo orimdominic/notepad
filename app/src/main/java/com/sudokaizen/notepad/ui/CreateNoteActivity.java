@@ -7,6 +7,7 @@ import android.support.annotation.Nullable;
 import android.support.design.widget.TextInputEditText;
 import android.support.design.widget.TextInputLayout;
 import android.support.v7.app.AppCompatActivity;
+import android.text.TextUtils;
 import android.widget.Toast;
 
 import com.sudokaizen.notepad.R;
@@ -61,7 +62,7 @@ public class CreateNoteActivity extends AppCompatActivity {
 
     private void onCompleteAction() {
 
-        if (etNote.getText().length() == 0) {
+        if (TextUtils.isEmpty(etNote.getText())) {
             Toast.makeText(CreateNoteActivity.this,
                     "You didn't add any note", Toast.LENGTH_SHORT)
                     .show();
