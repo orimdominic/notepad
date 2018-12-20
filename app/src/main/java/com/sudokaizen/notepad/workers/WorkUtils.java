@@ -1,4 +1,4 @@
-package com.sudokaizen.notepad;
+package com.sudokaizen.notepad.workers;
 
 import com.sudokaizen.notepad.database.NoteEntry;
 
@@ -31,12 +31,12 @@ public class WorkUtils {
         Constraints constraints = new Constraints.Builder().setRequiredNetworkType
                 (NetworkType.CONNECTED).build();
 
-        OneTimeWorkRequest saveNoteWork =
-                new OneTimeWorkRequest.Builder(NoteSyncWorker.class)
+        OneTimeWorkRequest deleteNoteWork =
+                new OneTimeWorkRequest.Builder(NoteDeleteWorker.class)
                         .setConstraints(constraints)
                         .setInputData(setNoteWorkerInputData(noteEntry, userId))
                         .build();
-        WorkManager.getInstance().enqueue(saveNoteWork);
+        WorkManager.getInstance().enqueue(deleteNoteWork);
     }
 
     private static Data setNoteWorkerInputData(NoteEntry noteEntry, String userId) {

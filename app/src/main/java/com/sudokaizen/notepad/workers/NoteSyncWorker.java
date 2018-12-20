@@ -1,13 +1,11 @@
-package com.sudokaizen.notepad;
+package com.sudokaizen.notepad.workers;
 
 import android.content.Context;
 import android.support.annotation.NonNull;
-import android.widget.Toast;
 
 import com.google.firebase.database.DatabaseReference;
 import com.google.firebase.database.FirebaseDatabase;
 import com.sudokaizen.notepad.database.NoteEntry;
-import com.sudokaizen.notepad.database.NoteRepository;
 
 import androidx.work.Worker;
 import androidx.work.WorkerParameters;
@@ -24,10 +22,10 @@ public class NoteSyncWorker extends Worker {
         FirebaseDatabase remoteDb = FirebaseDatabase.getInstance();
         DatabaseReference rootRef = remoteDb.getReference();
 
-        String noteId = getInputData().getString(NoteRepository.NOTE_ID_KEY);
-        String noteContent = getInputData().getString(NoteRepository.NOTE_CONTENT_KEY);
-        long timeStamp = getInputData().getLong(NoteRepository.TIMESTAMP_KEY, 0);
-        String userId = getInputData().getString(NoteRepository.USER_ID_KEY);
+        String noteId = getInputData().getString(WorkUtils.NOTE_ID_KEY);
+        String noteContent = getInputData().getString(WorkUtils.NOTE_CONTENT_KEY);
+        long timeStamp = getInputData().getLong(WorkUtils.TIMESTAMP_KEY, 0);
+        String userId = getInputData().getString(WorkUtils.USER_ID_KEY);
 
         NoteEntry noteEntry;
         if (noteId != null && userId!=null) {

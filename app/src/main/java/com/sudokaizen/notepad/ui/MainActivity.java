@@ -115,7 +115,6 @@ public class MainActivity extends AppCompatActivity {
                     mNotesAdapter = new NotesAdapter(MainActivity.this, noteEntries);
                     mNotesAdapter.notifyDataSetChanged();
                     rvNotes.setAdapter(mNotesAdapter);
-//                    mNoteRepository.updateRemoteNotes(currentUser.getId(), noteEntries);
                 }
             }
         });
@@ -164,7 +163,7 @@ public class MainActivity extends AppCompatActivity {
 
     private void deleteNote(int notePosition) {
         NoteEntry noteToDelete = mNotesAdapter.getItemAt(notePosition);
-        mNoteRepository.deleteNote(noteToDelete);
+        mNoteRepository.deleteNote(noteToDelete, currentUser.getId());
         Toast.makeText(this, "Note deleted", Toast.LENGTH_SHORT).show();
     }
 

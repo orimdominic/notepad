@@ -11,11 +11,9 @@ import com.google.firebase.database.DatabaseError;
 import com.google.firebase.database.DatabaseReference;
 import com.google.firebase.database.FirebaseDatabase;
 import com.sudokaizen.notepad.AppExecutors;
-import com.sudokaizen.notepad.WorkUtils;
+import com.sudokaizen.notepad.workers.WorkUtils;
 
 import java.util.List;
-
-import androidx.work.Data;
 
 public class NoteRepository {
 
@@ -23,10 +21,6 @@ public class NoteRepository {
     private AppExecutors mAppExecutors;
     private AppDatabase appDb;
     private DatabaseReference mRootRef;
-    public static final String NOTE_CONTENT_KEY = "NOTE_CONTENT_KEY";
-    public static final String NOTE_ID_KEY = "NOTE_ID_KEY";
-    public static final String TIMESTAMP_KEY = "TIMESTAMP_KEY";
-    public static final String USER_ID_KEY = "USER_ID_KEY";
 
     public static NoteRepository getInstance(Context context) {
         if (instance == null) {
@@ -69,7 +63,7 @@ public class NoteRepository {
 
     public void updateNote(String userId, NoteEntry noteEntry) {
         insertNoteOnLocal(noteEntry);
-   WorkUtils.scheduleNoteSyncWork(noteEntry, userId);
+        WorkUtils.scheduleNoteSyncWork(noteEntry, userId);
     }
 
     public void updateLocalNotes(String userId) {
@@ -103,13 +97,14 @@ public class NoteRepository {
         });
     }
 
-    public void deleteNote(final NoteEntry note) {
+    public void deleteNote(final NoteEntry note, String userId) {
         mAppExecutors.diskIO().execute(new Runnable() {
             @Override
             public void run() {
                 appDb.noteDao().deleteNote(note);
             }
         });
+        WorkUtils.scheduleNoteDeleteWork(note, userId);
     }
 
     public void deleteAllLocalNotes() {
