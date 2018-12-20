@@ -55,7 +55,7 @@ public class NoteRepository {
         System.out.println("NoteRepo noteId: " + noteId);
         noteEntry.setId(noteId);
         insertNoteOnLocal(noteEntry);
-        setSaveNoteWork(userId, noteEntry, noteId);
+        WorkUtils.scheduleNoteSyncWork(noteEntry, userId);
     }
 
     private void insertNoteOnLocal(final NoteEntry note) {
@@ -69,7 +69,7 @@ public class NoteRepository {
 
     public void updateNote(String userId, NoteEntry noteEntry) {
         insertNoteOnLocal(noteEntry);
-        setSaveNoteWork(userId, noteEntry, noteEntry.getId());
+   WorkUtils.scheduleNoteSyncWork(noteEntry, userId);
     }
 
     public void updateLocalNotes(String userId) {
@@ -101,21 +101,6 @@ public class NoteRepository {
 
             }
         });
-    }
-
-    private void setSaveNoteWork(String userId, NoteEntry noteEntry, String noteId) {
-        String[] strings = {noteId, noteEntry.getContent(), userId};
-        long timeStamp = noteEntry.getTimestamp();
-        WorkUtils.scheduleNoteSyncWork(setNoteSyncInputData(strings, timeStamp));
-    }
-
-    private Data setNoteSyncInputData(String[] values, long timeStamp) {
-        Data.Builder builder = new Data.Builder();
-        builder.putString(NOTE_ID_KEY, values[0])
-                .putString(NOTE_CONTENT_KEY, values[1])
-                .putString(USER_ID_KEY, values[2])
-                .putLong(TIMESTAMP_KEY, timeStamp);
-        return builder.build();
     }
 
     public void deleteNote(final NoteEntry note) {
