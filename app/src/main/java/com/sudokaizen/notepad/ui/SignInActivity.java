@@ -26,27 +26,12 @@ import com.sudokaizen.notepad.viewmodel.CreateNoteViewModel;
 public class SignInActivity extends AppCompatActivity {
 
     private static final int RC_SIGN_IN = 123;
-    private UserRepository mUserRepository;
-    private NoteRepository mNoteRepository;
-    private CreateNoteViewModel mCreateNoteViewModel;
-    private UserEntity formerUser;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_sign_in);
-        mUserRepository = UserRepository.getInstance(this);
-        mNoteRepository = NoteRepository.getInstance(this);
         System.out.println("Check created");
-
-        mCreateNoteViewModel = ViewModelProviders.of(this).get(CreateNoteViewModel.class);
-        mCreateNoteViewModel.mLiveUser.observe(this, new Observer<UserEntity>() {
-            @Override
-            public void onChanged(@Nullable UserEntity userEntity) {
-                formerUser = userEntity;
-            }
-        });
-
 
         // Configure sign-in to request the user's ID, email address, and basic
         // profile. ID and basic profile are included in DEFAULT_SIGN_IN.
@@ -68,18 +53,6 @@ public class SignInActivity extends AppCompatActivity {
     }
 
     @Override
-    protected void onStart() {
-        super.onStart();
-        // Check for existing Google Sign In account, if the user is already signed in
-        // the GoogleSignInAccount will be non-null.
-        GoogleSignInAccount account = GoogleSignIn.getLastSignedInAccount(this);
-        if (account != null) {
-            startActivity(new Intent(SignInActivity.this, MainActivity.class));
-            finish();
-        }
-    }
-
-    @Override
     public void onActivityResult(int requestCode, int resultCode, Intent data) {
         super.onActivityResult(requestCode, resultCode, data);
         System.out.println("Check onActivityResult running");
@@ -96,31 +69,15 @@ public class SignInActivity extends AppCompatActivity {
     private void handleSignInResult(Task<GoogleSignInAccount> completedTask) {
         try {
             GoogleSignInAccount account = completedTask.getResult(ApiException.class);
-            System.out.println("account "+account.getEmail());
-            UserEntity currentUser = new UserEntity(account.getEmail(), account.getDisplayName());
-
-            if (formerUser == null){
-                mUserRepository.deleteAllUsers();
-                mUserRepository.insertUser(currentUser);
-            }else if (!formerUser.getId().equals(currentUser.getId())){
-                // diff person
-                mUserRepository.deleteAllUsers();
-                mNoteRepository.deleteAllNotes();
-                mUserRepository.insertUser(currentUser);
-            }
-
-            System.out.println("Check onActivityResult after if");
+            System.out.println("account " + account.getEmail());
             startActivity(new Intent(SignInActivity.this, MainActivity.class));
             finish();
-
-            } catch (ApiException e) {
+        } catch (ApiException e) {
             // The ApiException status code indicates the detailed failure reason.
             // Please refer to the GoogleSignInStatusCodes class reference for more information.
             Log.w("SignInActivity", "signInResult:failed code=" + e.getMessage());
 
-                Toast.makeText(this, "Error! Sign in failed", Toast.LENGTH_SHORT)
-                        .show();
-
+            Toast.makeText(this, "Error! Sign in failed", Toast.LENGTH_SHORT).show();
         }
     }
 
