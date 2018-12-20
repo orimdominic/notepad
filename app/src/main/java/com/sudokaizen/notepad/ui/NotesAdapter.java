@@ -43,8 +43,7 @@ public class NotesAdapter extends RecyclerView.Adapter<NotesAdapter.NoteViewHold
         final NoteEntry note = mNoteEntries.get(i);
 
         noteViewHolder.tvContent.setText(note.getContent());
-        noteViewHolder.tvDateTime.setText(note.getDateString());
-//        noteViewHolder.cvNote.setStrokeColor(getRandomColor())
+        noteViewHolder.tvDateTime.setText(note.getId() + " " + note.getDateString());
 
         noteViewHolder.cvNote.setOnClickListener(new View.OnClickListener() {
             @Override
@@ -68,31 +67,6 @@ public class NotesAdapter extends RecyclerView.Adapter<NotesAdapter.NoteViewHold
         return mNoteEntries.get(position);
     }
 
-//    private int getRandomColor(){
-//        Random random = new Random();
-//        int[] colors = {
-//                android.R.color.darker_gray,
-//                android.R.color.darker_gray,
-//                android.R.color.darker_gray,
-//                android.R.color.darker_gray,
-//                android.R.color.darker_gray,
-//                android.R.color.darker_gray,
-//                android.R.color.darker_gray,
-//                android.R.color.darker_gray,
-//                android.R.color.darker_gray,
-//                android.R.color.darker_gray,
-//                android.R.color.darker_gray,
-//                android.R.color.darker_gray,
-//                android.R.color.darker_gray,
-//                android.R.color.darker_gray,
-//                android.R.color.darker_gray,
-//                android.R.color.darker_gray,
-//                android.R.color.darker_gray,
-//                android.R.color.darker_gray,
-//                android.R.color.darker_gray
-//        };
-//        return random.nextInt(colors.length-1);
-//    }
 
     public class NoteViewHolder extends RecyclerView.ViewHolder{
 

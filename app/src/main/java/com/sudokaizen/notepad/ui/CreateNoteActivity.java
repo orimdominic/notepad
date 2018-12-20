@@ -98,9 +98,9 @@ public class CreateNoteActivity extends AppCompatActivity {
     }
 
     private void saveNote(NoteEntry noteEntry, String toastMsg) {
-        mNoteRepository.insertNoteToRemoteDb(userId, noteEntry);
-        Toast.makeText(CreateNoteActivity.this, toastMsg, Toast.LENGTH_SHORT)
-                .show();
+        mNoteRepository.insertNote(noteEntry);
+//        Toast.makeText(CreateNoteActivity.this, toastMsg, Toast.LENGTH_SHORT)
+//                .show();
     }
 
     @Override

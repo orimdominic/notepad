@@ -27,9 +27,12 @@ import com.google.android.gms.auth.api.signin.GoogleSignInClient;
 import com.google.android.gms.auth.api.signin.GoogleSignInOptions;
 import com.google.android.gms.tasks.OnCompleteListener;
 import com.google.android.gms.tasks.Task;
+import com.sudokaizen.notepad.AppExecutors;
 import com.sudokaizen.notepad.R;
 import com.sudokaizen.notepad.database.NoteRepository;
 import com.sudokaizen.notepad.database.NoteEntry;
+import com.sudokaizen.notepad.database.UserEntity;
+import com.sudokaizen.notepad.database.UserRepository;
 import com.sudokaizen.notepad.viewmodel.MainViewModel;
 
 import java.util.List;
@@ -41,8 +44,11 @@ public class MainActivity extends AppCompatActivity {
     LinearLayoutManager rvLayoutManager;
     private NotesAdapter mNotesAdapter;
     private NoteRepository mNoteRepository;
+    private UserRepository mUserRepository;
+    private UserEntity currentUser;
 
     public static final String NOTE_ID = "com.sudokaizen.notepad.ui.MainActivity.NOTE_ID_KEY";
+    private AppExecutors mAppExecutors;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -58,7 +64,9 @@ public class MainActivity extends AppCompatActivity {
 
         setContentView(R.layout.activity_main);
 
+        mAppExecutors = new AppExecutors();
         mNoteRepository = NoteRepository.getInstance(MainActivity.this);
+        mUserRepository = UserRepository.getInstance(this);
         FloatingActionButton fab = findViewById(R.id.fab);
         rvNotes = findViewById(R.id.rv_main_notes);
         rvLayoutManager =
@@ -98,16 +106,33 @@ public class MainActivity extends AppCompatActivity {
             public void onChanged(@Nullable List<NoteEntry> noteEntries) {
                 if (noteEntries.size() == 0) {
                     // TODO: 08-Dec-18 Display empty view for RecyclerView  and hide RecyclerView
+                    mNoteRepository.updateLocalNotes(currentUser.getId());
                 } else {
                     mNotesAdapter = new NotesAdapter(MainActivity.this, noteEntries);
                     mNotesAdapter.notifyDataSetChanged();
                     rvNotes.setAdapter(mNotesAdapter);
+                    mNoteRepository.updateRemoteNotes(currentUser.getId(), noteEntries);
                 }
             }
         });
     }
 
-    // TODO: 14-Dec-18 Add settings for user to sort code by their choice criterion
+    private void checkForUser() {
+        mAppExecutors.diskIO().execute(new Runnable() {
+            @Override
+            public void run() {
+                currentUser = mUserRepository.getUser();
+            }
+        });
+    }
+
+    @Override
+    protected void onResume() {
+        super.onResume();
+        checkForUser();
+    }
+
+    // TODO: 14-Dec-18 Add settings for user to sort notes by their choice criterion
 
     private void showDeleteConfirmationDialog(final int notePosition) {
 
@@ -146,7 +171,6 @@ public class MainActivity extends AppCompatActivity {
         inflater.inflate(R.menu.menu_main, menu);
         return true;
     }
-
 
     @Override
     public boolean onOptionsItemSelected(MenuItem item) {

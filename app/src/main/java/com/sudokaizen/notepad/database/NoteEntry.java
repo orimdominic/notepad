@@ -4,11 +4,15 @@ import android.arch.persistence.room.Entity;
 import android.arch.persistence.room.Ignore;
 import android.arch.persistence.room.PrimaryKey;
 
+import com.google.firebase.database.IgnoreExtraProperties;
+
 import java.text.SimpleDateFormat;
 import java.util.Date;
 
+@IgnoreExtraProperties
 @Entity(tableName = "notes")
 public class NoteEntry {
+
     @PrimaryKey(autoGenerate = true)
     private int id;
     private String content;
@@ -18,6 +22,7 @@ public class NoteEntry {
     public NoteEntry() {
         // Firebase required no-arg constructor
     }
+
 
     public NoteEntry(int id, String content, long timestamp) {
         this.id = id;
@@ -49,7 +54,7 @@ public class NoteEntry {
         this.timestamp = timestamp;
     }
 
-    public String getDateString(){
+    public String getDateString() {
         SimpleDateFormat stringFormat = new SimpleDateFormat("EEE, MMM d, h:mm a");
         return stringFormat.format(new Date(this.timestamp));
     }

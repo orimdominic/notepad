@@ -3,10 +3,14 @@ package com.sudokaizen.notepad.database;
 import android.arch.lifecycle.LiveData;
 import android.content.Context;
 import android.support.annotation.NonNull;
+import android.support.annotation.Nullable;
 import android.widget.Toast;
 
 import com.google.android.gms.tasks.OnCompleteListener;
 import com.google.android.gms.tasks.Task;
+import com.google.firebase.database.ChildEventListener;
+import com.google.firebase.database.DataSnapshot;
+import com.google.firebase.database.DatabaseError;
 import com.google.firebase.database.DatabaseReference;
 import com.google.firebase.database.FirebaseDatabase;
 import com.sudokaizen.notepad.AppExecutors;
@@ -59,7 +63,7 @@ public class NoteRepository {
         });
     }
 
-    public void deleteAllNotes(){
+    public void deleteAllNotes() {
         mAppExecutors.diskIO().execute(new Runnable() {
             @Override
             public void run() {
@@ -73,20 +77,55 @@ public class NoteRepository {
     }
 
 
-    public void insertNoteToRemoteDb(final String userId, final  NoteEntry note){
-        final String noteId = String.valueOf(note.getId());
-        mRootRef.child(userId).child(noteId)
-                .setValue(note)
-                .addOnCompleteListener(new OnCompleteListener<Void>() {
-                    @Override
-                    public void onComplete(@NonNull Task<Void> task) {
-                        if (task.isSuccessful()){
-                            insertNote(note);
-                            Toast.makeText(mContext, "Note saved", Toast.LENGTH_SHORT).show();
-                        }else {
-                            Toast.makeText(mContext, "Note not saved", Toast.LENGTH_SHORT).show();
-                        }
-                    }
-                });
+//    public void insertNoteToRemoteDb(final String userId, final  NoteEntry note){
+//        final String noteId = String.valueOf(note.getId());
+//        mRootRef.child(userId).child(noteId)
+//                .setValue(note)
+//                .addOnCompleteListener(new OnCompleteListener<Void>() {
+//                    @Override
+//                    public void onComplete(@NonNull Task<Void> task) {
+//                        if (task.isSuccessful()){
+//                            insertNote(note);
+//                            Toast.makeText(mContext, "Note saved", Toast.LENGTH_SHORT).show();
+//                        }else {
+//                            Toast.makeText(mContext, "Note not saved", Toast.LENGTH_SHORT).show();
+//                        }
+//                    }
+//                });
+//    }
+
+    public void updateRemoteNotes(String currentUserId, List<NoteEntry> noteEntries) {
+        mRootRef.child(currentUserId).setValue(noteEntries);
+    }
+
+    public void updateLocalNotes(String userId) {
+        mRootRef.child(userId).addChildEventListener(new ChildEventListener() {
+            @Override
+            public void onChildAdded(@NonNull DataSnapshot dataSnapshot, @Nullable String s) {
+
+            }
+
+            @Override
+            public void onChildChanged(@NonNull DataSnapshot dataSnapshot, @Nullable String s) {
+                NoteEntry noteEntry = dataSnapshot.getValue(NoteEntry.class);
+                insertNote(noteEntry);
+            }
+
+            @Override
+            public void onChildRemoved(@NonNull DataSnapshot dataSnapshot) {
+
+            }
+
+            @Override
+            public void onChildMoved(@NonNull DataSnapshot dataSnapshot, @Nullable String s) {
+
+            }
+
+            @Override
+            public void onCancelled(@NonNull DatabaseError databaseError) {
+
+            }
+        });
+
     }
 }
