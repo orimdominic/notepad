@@ -23,7 +23,7 @@ public class CreateNoteActivity extends AppCompatActivity {
 
     private NoteRepository mNoteRepository;
     private TextInputEditText etNote;
-    private boolean isNewNote;
+    private boolean isNewNote = true;
     private String editNoteId;
     private UserEntity user;
     private String userId;
@@ -89,22 +89,22 @@ public class CreateNoteActivity extends AppCompatActivity {
         noteEntry.setTimestamp(System.currentTimeMillis());
 
         if (isNewNote) {
-            saveNote(noteEntry, "Note saved");
+            saveNote(noteEntry);
         } else {
             noteEntry.setId(editNoteId);
-            updateNote(noteEntry, "Note updated");
+            updateNote(noteEntry);
         }
     }
 
-    private void saveNote(NoteEntry noteEntry, String toastMsg) {
+    private void saveNote(NoteEntry noteEntry) {
         mNoteRepository.insertNote(userId, noteEntry);
-        Toast.makeText(CreateNoteActivity.this, toastMsg, Toast.LENGTH_SHORT)
+        Toast.makeText(CreateNoteActivity.this, "Note saved", Toast.LENGTH_SHORT)
                 .show();
     }
 
-    private void updateNote(NoteEntry noteEntry, String toastMsg) {
+    private void updateNote(NoteEntry noteEntry) {
         mNoteRepository.updateNote(userId, noteEntry);
-        Toast.makeText(CreateNoteActivity.this, toastMsg, Toast.LENGTH_SHORT)
+        Toast.makeText(CreateNoteActivity.this, "Note updated", Toast.LENGTH_SHORT)
                 .show();
     }
 

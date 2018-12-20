@@ -1,6 +1,7 @@
 package com.sudokaizen.notepad.database;
 
 import android.arch.lifecycle.LiveData;
+import android.arch.lifecycle.Observer;
 import android.content.Context;
 import android.support.annotation.NonNull;
 import android.support.annotation.Nullable;
@@ -14,15 +15,31 @@ import com.google.firebase.database.DatabaseError;
 import com.google.firebase.database.DatabaseReference;
 import com.google.firebase.database.FirebaseDatabase;
 import com.sudokaizen.notepad.AppExecutors;
+import com.sudokaizen.notepad.SaveNoteWorker;
+import com.sudokaizen.notepad.ui.MainActivity;
 
 import java.util.List;
+import java.util.concurrent.TimeUnit;
+
+import androidx.work.Constraints;
+import androidx.work.Data;
+import androidx.work.NetworkType;
+import androidx.work.PeriodicWorkRequest;
+import androidx.work.WorkInfo;
+import androidx.work.WorkManager;
 
 public class NoteRepository {
 
     private static NoteRepository instance;
+    private AppExecutors mAppExecutors;
     private AppDatabase appDb;
-    private FirebaseDatabase mRemoteDb;
+    private Context mContext;
     private DatabaseReference mRootRef;
+    public static final String NOTE_CONTENT_KEY = "NOTE_CONTENT_KEY";
+    public static final String NOTE_ID_KEY = "NOTE_ID_KEY";
+    public static final String TIMESTAMP_KEY = "TIMESTAMP_KEY";
+    public static final String USER_ID_KEY = "USER_ID_KEY";
+
 
     public static NoteRepository getInstance(Context context) {
         if (instance == null) {
@@ -33,51 +50,84 @@ public class NoteRepository {
 
     private NoteRepository(Context context) {
         appDb = AppDatabase.getInstance(context);
-        mRemoteDb = FirebaseDatabase.getInstance();
-        mRootRef = mRemoteDb.getReference();
+        FirebaseDatabase remoteDb = FirebaseDatabase.getInstance();
+        mRootRef = remoteDb.getReference();
+        mAppExecutors = new AppExecutors();
+        mContext = context;
     }
 
     public LiveData<List<NoteEntry>> getAllNotes() {
         return appDb.noteDao().getAllNotes();
     }
 
-    public void insertNoteOnLocal(final NoteEntry note) {
-        appDb.noteDao().insertNote(note);
+    private void insertNoteOnLocal(final NoteEntry note) {
+        mAppExecutors.diskIO().execute(new Runnable() {
+            @Override
+            public void run() {
+                appDb.noteDao().insertNote(note);
+            }
+        });
+
     }
 
     public void deleteNote(final NoteEntry note) {
-        appDb.noteDao().deleteNote(note);
+        mAppExecutors.diskIO().execute(new Runnable() {
+            @Override
+            public void run() {
+                appDb.noteDao().deleteNote(note);
+            }
+        });
     }
 
     public void deleteAllNotes() {
-        appDb.noteDao().deleteAllNotes();
+        mAppExecutors.diskIO().execute(new Runnable() {
+            @Override
+            public void run() {
+                appDb.noteDao().deleteAllNotes();
+            }
+        });
+
     }
 
     public NoteEntry getNoteById(final String noteId) {
         return appDb.noteDao().getNoteById(noteId);
     }
 
-    public void updateRemoteNotes(String currentUserId, List<NoteEntry> noteEntries) {
-        mRootRef.child(currentUserId).setValue(noteEntries);
-    }
-
-    public void updateNote(String userId, NoteEntry noteEntry){
-        // TODO: 20-Dec-18 Push this to a work manager
-        mRootRef.child(userId).child(noteEntry.getId()).setValue(noteEntry);
-
+    public void updateNote(String userId, NoteEntry noteEntry) {
         insertNoteOnLocal(noteEntry);
-
+        setSaveNoteWork(userId, noteEntry, noteEntry.getId());
     }
 
-    public void insertNote(String userId, NoteEntry noteEntry){
-
-        // TODO: 20-Dec-18 Push this to a work manager
+    public void insertNote(String userId, NoteEntry noteEntry) {
         String noteId = mRootRef.push().getKey();
+        System.out.println("NoteRepo noteId: " + noteId);
         noteEntry.setId(noteId);
-        mRootRef.child(userId).child(noteId).setValue(noteEntry);
-
-
         insertNoteOnLocal(noteEntry);
+        setSaveNoteWork(userId, noteEntry, noteId);
+    }
+
+    private void setSaveNoteWork(String userId, NoteEntry noteEntry, String noteId) {
+        String[] strings = {noteId, noteEntry.getContent(), userId};
+        long timeStamp = noteEntry.getTimestamp();
+
+        Constraints constraints = new Constraints.Builder().setRequiredNetworkType
+                (NetworkType.CONNECTED).build();
+
+        PeriodicWorkRequest saveNoteWork = new PeriodicWorkRequest.Builder(SaveNoteWorker
+                .class, 5, TimeUnit.MINUTES)
+                .setConstraints(constraints)
+                .setInputData(createInputDataSaveNoteWorker(strings, timeStamp))
+                .build();
+        WorkManager.getInstance().enqueue(saveNoteWork);
+    }
+
+    private Data createInputDataSaveNoteWorker(String[] values, long timeStamp) {
+        Data.Builder builder = new Data.Builder();
+        builder.putString(NOTE_ID_KEY, values[0])
+                .putString(NOTE_CONTENT_KEY, values[1])
+                .putString(USER_ID_KEY, values[2])
+                .putLong(TIMESTAMP_KEY, timeStamp);
+        return builder.build();
     }
 
     public void updateLocalNotes(String userId) {

@@ -114,7 +114,7 @@ public class MainActivity extends AppCompatActivity {
                     mNotesAdapter = new NotesAdapter(MainActivity.this, noteEntries);
                     mNotesAdapter.notifyDataSetChanged();
                     rvNotes.setAdapter(mNotesAdapter);
-                    mNoteRepository.updateRemoteNotes(currentUser.getId(), noteEntries);
+//                    mNoteRepository.updateRemoteNotes(currentUser.getId(), noteEntries);
                 }
             }
         });
@@ -145,7 +145,7 @@ public class MainActivity extends AppCompatActivity {
         builder.setPositiveButton("Delete", new DialogInterface.OnClickListener() {
             @Override
             public void onClick(DialogInterface dialogInterface, int i) {
-                deleteFragrances(notePosition);
+                deleteNote(notePosition);
             }
         });
         builder.setNegativeButton("Cancel", new DialogInterface.OnClickListener() {
@@ -161,9 +161,8 @@ public class MainActivity extends AppCompatActivity {
         alertDialog.show();
     }
 
-    private void deleteFragrances(int notePosition) {
+    private void deleteNote(int notePosition) {
         NoteEntry noteToDelete = mNotesAdapter.getItemAt(notePosition);
-        System.out.println("Note content is " + noteToDelete.getContent());
         mNoteRepository.deleteNote(noteToDelete);
         Toast.makeText(this, "Note deleted", Toast.LENGTH_SHORT).show();
     }
