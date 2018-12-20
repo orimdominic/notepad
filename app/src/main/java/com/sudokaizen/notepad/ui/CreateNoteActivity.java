@@ -64,6 +64,10 @@ public class CreateNoteActivity extends AppCompatActivity {
             @Override
             public void onChanged(@Nullable UserEntity userEntity) {
                 user = userEntity;
+                if (user!=null){
+                    System.out.println("CreateNote user: "+ user.toString());
+                    userId = user.getId();
+                }
             }
         });
 

@@ -104,10 +104,4 @@ public class SignInActivity extends AppCompatActivity {
         UserEntity newUser = new UserEntity(account.getEmail(), account.getDisplayName());
         mUserRepository.insertUser(newUser);
     }
-
-
-    @Override
-    protected void onDestroy() {
-        super.onDestroy();
-    }
 }
