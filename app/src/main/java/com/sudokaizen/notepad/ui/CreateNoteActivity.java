@@ -62,13 +62,11 @@ public class CreateNoteActivity extends AppCompatActivity {
             @Override
             public void onChanged(@Nullable UserEntity userEntity) {
                 user = userEntity;
-                if (user!=null){
-                    System.out.println("CreateNote user: "+ user.toString());
+                if (user != null) {
                     userId = user.getId();
                 }
             }
         });
-
 
         Bundle extras = getIntent().getExtras();
         if (extras != null) {
@@ -100,7 +98,7 @@ public class CreateNoteActivity extends AppCompatActivity {
     }
 
     private void saveNote(NoteEntry noteEntry, String toastMsg) {
-        mNoteRepository.insertNote(noteEntry);
+        mNoteRepository.insertNoteToRemoteDb(userId, noteEntry);
         Toast.makeText(CreateNoteActivity.this, toastMsg, Toast.LENGTH_SHORT)
                 .show();
     }

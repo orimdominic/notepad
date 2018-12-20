@@ -97,7 +97,6 @@ public class SignInActivity extends AppCompatActivity {
                 mNoteRepository.deleteAllNotes();
                 persistNewUser(account);
             }
-
             startActivity(new Intent(SignInActivity.this, MainActivity.class));
             finish();
         } catch (ApiException e) {
