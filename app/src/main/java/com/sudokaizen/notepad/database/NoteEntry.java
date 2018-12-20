@@ -3,6 +3,7 @@ package com.sudokaizen.notepad.database;
 import android.arch.persistence.room.Entity;
 import android.arch.persistence.room.Ignore;
 import android.arch.persistence.room.PrimaryKey;
+import android.support.annotation.NonNull;
 
 import com.google.firebase.database.IgnoreExtraProperties;
 
@@ -13,8 +14,9 @@ import java.util.Date;
 @Entity(tableName = "notes")
 public class NoteEntry {
 
-    @PrimaryKey(autoGenerate = true)
-    private int id;
+    @PrimaryKey
+    @NonNull
+    private String id;
     private String content;
     private long timestamp;
 
@@ -24,13 +26,13 @@ public class NoteEntry {
     }
 
 
-    public NoteEntry(int id, String content, long timestamp) {
+    public NoteEntry(@NonNull String id, String content, long timestamp) {
         this.id = id;
         this.content = content;
         this.timestamp = timestamp;
     }
 
-    public int getId() {
+    public String getId() {
         return id;
     }
 
@@ -42,7 +44,7 @@ public class NoteEntry {
         return timestamp;
     }
 
-    public void setId(int id) {
+    public void setId(@NonNull String id) {
         this.id = id;
     }
 

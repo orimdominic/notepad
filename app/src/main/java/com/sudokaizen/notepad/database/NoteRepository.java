@@ -21,10 +21,8 @@ public class NoteRepository {
 
     private static NoteRepository instance;
     private AppDatabase appDb;
-    private AppExecutors mAppExecutors;
     private FirebaseDatabase mRemoteDb;
     private DatabaseReference mRootRef;
-    private Context mContext;
 
     public static NoteRepository getInstance(Context context) {
         if (instance == null) {
@@ -35,44 +33,27 @@ public class NoteRepository {
 
     private NoteRepository(Context context) {
         appDb = AppDatabase.getInstance(context);
-        mAppExecutors = new AppExecutors();
         mRemoteDb = FirebaseDatabase.getInstance();
         mRootRef = mRemoteDb.getReference();
-        mContext = context;
     }
 
     public LiveData<List<NoteEntry>> getAllNotes() {
         return appDb.noteDao().getAllNotes();
     }
 
-    public void insertNote(final NoteEntry note) {
-        mAppExecutors.diskIO().execute(new Runnable() {
-            @Override
-            public void run() {
-                appDb.noteDao().insertNote(note);
-            }
-        });
+    public void insertNoteOnLocal(final NoteEntry note) {
+        appDb.noteDao().insertNote(note);
     }
 
     public void deleteNote(final NoteEntry note) {
-        mAppExecutors.diskIO().execute(new Runnable() {
-            @Override
-            public void run() {
-                appDb.noteDao().deleteNote(note);
-            }
-        });
+        appDb.noteDao().deleteNote(note);
     }
 
     public void deleteAllNotes() {
-        mAppExecutors.diskIO().execute(new Runnable() {
-            @Override
-            public void run() {
-                appDb.noteDao().deleteAllNotes();
-            }
-        });
+        appDb.noteDao().deleteAllNotes();
     }
 
-    public NoteEntry getNoteById(final int noteId) {
+    public NoteEntry getNoteById(final String noteId) {
         return appDb.noteDao().getNoteById(noteId);
     }
 
@@ -80,18 +61,37 @@ public class NoteRepository {
         mRootRef.child(currentUserId).setValue(noteEntries);
     }
 
+    public void updateNote(String userId, NoteEntry noteEntry){
+        // TODO: 20-Dec-18 Push this to a work manager
+        mRootRef.child(userId).child(noteEntry.getId()).setValue(noteEntry);
+
+        insertNoteOnLocal(noteEntry);
+
+    }
+
+    public void insertNote(String userId, NoteEntry noteEntry){
+
+        // TODO: 20-Dec-18 Push this to a work manager
+        String noteId = mRootRef.push().getKey();
+        noteEntry.setId(noteId);
+        mRootRef.child(userId).child(noteId).setValue(noteEntry);
+
+
+        insertNoteOnLocal(noteEntry);
+    }
+
     public void updateLocalNotes(String userId) {
         mRootRef.child(userId).addChildEventListener(new ChildEventListener() {
             @Override
             public void onChildAdded(@NonNull DataSnapshot dataSnapshot, @Nullable String s) {
                 NoteEntry noteEntry = dataSnapshot.getValue(NoteEntry.class);
-                insertNote(noteEntry);
+                insertNoteOnLocal(noteEntry);
             }
 
             @Override
             public void onChildChanged(@NonNull DataSnapshot dataSnapshot, @Nullable String s) {
                 NoteEntry noteEntry = dataSnapshot.getValue(NoteEntry.class);
-                insertNote(noteEntry);
+                insertNoteOnLocal(noteEntry);
             }
 
             @Override

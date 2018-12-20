@@ -31,7 +31,7 @@ public class CreateNoteViewModel extends AndroidViewModel {
     }
 
 
-    public void getNoteById(final int noteId) {
+    public void getNoteById(final String noteId) {
         mAppExecutors.diskIO().execute(new Runnable() {
             @Override
             public void run() {

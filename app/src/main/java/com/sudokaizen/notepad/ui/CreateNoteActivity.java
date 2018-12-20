@@ -15,7 +15,6 @@ import com.sudokaizen.notepad.R;
 import com.sudokaizen.notepad.database.NoteRepository;
 import com.sudokaizen.notepad.database.NoteEntry;
 import com.sudokaizen.notepad.database.UserEntity;
-import com.sudokaizen.notepad.database.UserRepository;
 import com.sudokaizen.notepad.viewmodel.CreateNoteViewModel;
 
 import static com.sudokaizen.notepad.ui.MainActivity.NOTE_ID;
@@ -25,7 +24,7 @@ public class CreateNoteActivity extends AppCompatActivity {
     private NoteRepository mNoteRepository;
     private TextInputEditText etNote;
     private boolean isNewNote;
-    private int editNoteId;
+    private String editNoteId;
     private UserEntity user;
     private String userId;
 
@@ -70,7 +69,7 @@ public class CreateNoteActivity extends AppCompatActivity {
 
         Bundle extras = getIntent().getExtras();
         if (extras != null) {
-            int noteId = extras.getInt(NOTE_ID);
+            String noteId = extras.getString(NOTE_ID);
             createNoteViewModel.getNoteById(noteId);
             isNewNote = false;
         }
@@ -93,14 +92,20 @@ public class CreateNoteActivity extends AppCompatActivity {
             saveNote(noteEntry, "Note saved");
         } else {
             noteEntry.setId(editNoteId);
-            saveNote(noteEntry, "Note updated");
+            updateNote(noteEntry, "Note updated");
         }
     }
 
     private void saveNote(NoteEntry noteEntry, String toastMsg) {
-        mNoteRepository.insertNote(noteEntry);
-//        Toast.makeText(CreateNoteActivity.this, toastMsg, Toast.LENGTH_SHORT)
-//                .show();
+        mNoteRepository.insertNote(userId, noteEntry);
+        Toast.makeText(CreateNoteActivity.this, toastMsg, Toast.LENGTH_SHORT)
+                .show();
+    }
+
+    private void updateNote(NoteEntry noteEntry, String toastMsg) {
+        mNoteRepository.updateNote(userId, noteEntry);
+        Toast.makeText(CreateNoteActivity.this, toastMsg, Toast.LENGTH_SHORT)
+                .show();
     }
 
     @Override
