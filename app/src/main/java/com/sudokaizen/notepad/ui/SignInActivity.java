@@ -94,7 +94,7 @@ public class SignInActivity extends AppCompatActivity {
             GoogleSignInAccount account = completedTask.getResult(ApiException.class);
             if ((formerUser == null) || (isNotFormerUser(account))) {
                 mUserRepository.deleteAllUsers();
-                mNoteRepository.deleteAllNotes();
+                mNoteRepository.deleteAllLocalNotes();
                 persistNewUser(account);
             }
             startActivity(new Intent(SignInActivity.this, MainActivity.class));
