@@ -26,11 +26,13 @@ import com.sudokaizen.notepad.viewmodel.CreateNoteViewModel;
 public class SignInActivity extends AppCompatActivity {
 
     private static final int RC_SIGN_IN = 123;
+    private UserRepository mUserRepository;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_sign_in);
+        mUserRepository = UserRepository.getInstance(this);
         initSignInButton();
     }
 
@@ -84,7 +86,7 @@ public class SignInActivity extends AppCompatActivity {
 
     private void persistUser(GoogleSignInAccount account) {
         UserEntity newUser = new UserEntity(account.getEmail(), account.getDisplayName());
-        newUser.toString();
+        mUserRepository.insertUser(newUser);
     }
 
 }

@@ -12,7 +12,7 @@ import android.support.annotation.NonNull;
 
 public abstract class AppDatabase extends RoomDatabase {
 
-    private static final String DATABASE_NAME = "Notes.db";
+    private static final String DATABASE_NAME = "notes.db";
     private static final Object LOCK = new Object();
     private static AppDatabase sInstance;
 
