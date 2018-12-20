@@ -2,6 +2,7 @@ package com.sudokaizen.notepad.viewmodel;
 
 import android.app.Application;
 import android.arch.lifecycle.AndroidViewModel;
+import android.arch.lifecycle.LiveData;
 import android.arch.lifecycle.MutableLiveData;
 import android.icu.lang.UScript;
 import android.support.annotation.NonNull;
@@ -49,4 +50,5 @@ public class CreateNoteViewModel extends AndroidViewModel {
             }
         });
     }
+
 }

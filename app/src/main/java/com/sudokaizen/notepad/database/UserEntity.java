@@ -32,8 +32,8 @@ public class UserEntity {
         return emailAddress;
     }
 
-    public void setId(@NonNull String id) {
-        this.id = id;
+    public void setId(@NonNull String emailAddress) {
+        this.id = formatEmailAddress(emailAddress);
     }
 
     /**

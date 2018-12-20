@@ -40,7 +40,9 @@ public class SignInActivity extends AppCompatActivity {
             @Override
             public void run() {
                 formerUser = mUserRepository.getUser();
-                System.out.println("The user: "+ formerUser.toString());
+                if (formerUser != null) {
+                    System.out.println("The user: " + formerUser.toString());
+                }
             }
         });
     }
@@ -94,7 +96,6 @@ public class SignInActivity extends AppCompatActivity {
             // The ApiException status code indicates the detailed failure reason.
             // Please refer to the GoogleSignInStatusCodes class reference for more information.
             Log.w("SignInActivity", "signInResult:failed code=" + e.getMessage());
-
             Toast.makeText(this, "Error! Sign in failed", Toast.LENGTH_SHORT).show();
         }
     }
@@ -103,6 +104,7 @@ public class SignInActivity extends AppCompatActivity {
         UserEntity newUser = new UserEntity(account.getEmail(), account.getDisplayName());
         mUserRepository.insertUser(newUser);
     }
+
 
     @Override
     protected void onDestroy() {

@@ -2,7 +2,13 @@ package com.sudokaizen.notepad.database;
 
 import android.arch.lifecycle.LiveData;
 import android.content.Context;
+import android.support.annotation.NonNull;
+import android.widget.Toast;
 
+import com.google.android.gms.tasks.OnCompleteListener;
+import com.google.android.gms.tasks.Task;
+import com.google.firebase.database.DatabaseReference;
+import com.google.firebase.database.FirebaseDatabase;
 import com.sudokaizen.notepad.AppExecutors;
 
 import java.util.List;
@@ -11,20 +17,24 @@ public class NoteRepository {
 
     private static NoteRepository instance;
     private AppDatabase appDb;
-
     private AppExecutors mAppExecutors;
+    private FirebaseDatabase mRemoteDb;
+    private DatabaseReference mRootRef;
+    private Context mContext;
 
     public static NoteRepository getInstance(Context context) {
         if (instance == null) {
             instance = new NoteRepository(context);
         }
-
         return instance;
     }
 
     private NoteRepository(Context context) {
         appDb = AppDatabase.getInstance(context);
         mAppExecutors = new AppExecutors();
+        mRemoteDb = FirebaseDatabase.getInstance();
+        mRootRef = mRemoteDb.getReference();
+        mContext = context;
     }
 
     public LiveData<List<NoteEntry>> getAllNotes() {
@@ -60,5 +70,23 @@ public class NoteRepository {
 
     public NoteEntry getNoteById(final int noteId) {
         return appDb.noteDao().getNoteById(noteId);
+    }
+
+
+    public void insertNoteToRemoteDb(final String userId, final  NoteEntry note){
+        final String noteId = String.valueOf(note.getId());
+        mRootRef.child(userId).child(noteId)
+                .setValue(note)
+                .addOnCompleteListener(new OnCompleteListener<Void>() {
+                    @Override
+                    public void onComplete(@NonNull Task<Void> task) {
+                        if (task.isSuccessful()){
+                            insertNote(note);
+                            Toast.makeText(mContext, "Note saved", Toast.LENGTH_SHORT).show();
+                        }else {
+                            Toast.makeText(mContext, "Note not saved", Toast.LENGTH_SHORT).show();
+                        }
+                    }
+                });
     }
 }

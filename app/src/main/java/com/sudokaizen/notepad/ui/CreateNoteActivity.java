@@ -8,12 +8,14 @@ import android.support.annotation.Nullable;
 import android.support.design.widget.TextInputEditText;
 import android.support.design.widget.TextInputLayout;
 import android.support.v7.app.AppCompatActivity;
+import android.text.TextUtils;
 import android.widget.Toast;
 
 import com.sudokaizen.notepad.R;
 import com.sudokaizen.notepad.database.NoteRepository;
 import com.sudokaizen.notepad.database.NoteEntry;
 import com.sudokaizen.notepad.database.UserEntity;
+import com.sudokaizen.notepad.database.UserRepository;
 import com.sudokaizen.notepad.viewmodel.CreateNoteViewModel;
 
 import static com.sudokaizen.notepad.ui.MainActivity.NOTE_ID;
@@ -21,10 +23,12 @@ import static com.sudokaizen.notepad.ui.MainActivity.NOTE_ID;
 public class CreateNoteActivity extends AppCompatActivity {
 
     private NoteRepository mNoteRepository;
+    private UserRepository mUserRepository;
     private TextInputEditText etNote;
     private boolean isNewNote;
     private int editNoteId;
     private UserEntity user;
+    private String userId;
 
 
     @SuppressLint("ResourceAsColor")
@@ -38,6 +42,7 @@ public class CreateNoteActivity extends AppCompatActivity {
 
         etNote = findViewById(R.id.et_create_note);
         mNoteRepository = NoteRepository.getInstance(CreateNoteActivity.this);
+        mUserRepository = UserRepository.getInstance(CreateNoteActivity.this);
         setupViewModel();
     }
 
@@ -58,9 +63,10 @@ public class CreateNoteActivity extends AppCompatActivity {
         createNoteViewModel.mLiveUser.observe(this, new Observer<UserEntity>() {
             @Override
             public void onChanged(@Nullable UserEntity userEntity) {
-               user  = userEntity;
+                user = userEntity;
             }
         });
+
 
         Bundle extras = getIntent().getExtras();
         if (extras != null) {
@@ -73,7 +79,7 @@ public class CreateNoteActivity extends AppCompatActivity {
 
     private void onCompleteAction() {
 
-        if (etNote.getText().length() == 0) {
+        if (TextUtils.isEmpty(etNote.getText())) {
             Toast.makeText(CreateNoteActivity.this,
                     "You didn't add any note", Toast.LENGTH_SHORT)
                     .show();
@@ -105,7 +111,6 @@ public class CreateNoteActivity extends AppCompatActivity {
 
     @Override
     public void onBackPressed() {
-//        onCompleteAction();
         finish();
     }
 }

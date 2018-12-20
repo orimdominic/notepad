@@ -12,8 +12,7 @@ public class UserRepository {
     private static UserRepository instance;
     private AppDatabase appDb;
     private AppExecutors mAppExecutors;
-    private MutableLiveData<UserEntity> mUser = new MutableLiveData<>();
-    UserEntity user;
+    public MutableLiveData<UserEntity> mUser = new MutableLiveData<>();
 
     public UserRepository(Context context) {
         appDb = AppDatabase.getInstance(context);
