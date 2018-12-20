@@ -1,9 +1,6 @@
 package com.sudokaizen.notepad.ui;
 
-import android.arch.lifecycle.Observer;
-import android.arch.lifecycle.ViewModelProviders;
 import android.content.Intent;
-import android.support.annotation.Nullable;
 import android.support.v7.app.AppCompatActivity;
 import android.os.Bundle;
 import android.util.Log;
@@ -17,23 +14,41 @@ import com.google.android.gms.auth.api.signin.GoogleSignInOptions;
 import com.google.android.gms.common.SignInButton;
 import com.google.android.gms.common.api.ApiException;
 import com.google.android.gms.tasks.Task;
+import com.sudokaizen.notepad.AppExecutors;
 import com.sudokaizen.notepad.R;
-import com.sudokaizen.notepad.database.NoteRepository;
 import com.sudokaizen.notepad.database.UserEntity;
 import com.sudokaizen.notepad.database.UserRepository;
-import com.sudokaizen.notepad.viewmodel.CreateNoteViewModel;
 
 public class SignInActivity extends AppCompatActivity {
 
     private static final int RC_SIGN_IN = 123;
+    private AppExecutors mAppExecutors;
     private UserRepository mUserRepository;
+    private UserEntity formerUser;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_sign_in);
+        mAppExecutors = new AppExecutors();
         mUserRepository = UserRepository.getInstance(this);
         initSignInButton();
+    }
+
+    private void checkForUser() {
+        mAppExecutors.diskIO().execute(new Runnable() {
+            @Override
+            public void run() {
+                formerUser = mUserRepository.getUser();
+                System.out.println("The user: "+ formerUser.toString());
+            }
+        });
+    }
+
+    @Override
+    protected void onResume() {
+        super.onResume();
+        checkForUser();
     }
 
     private void initSignInButton() {
@@ -72,7 +87,7 @@ public class SignInActivity extends AppCompatActivity {
     private void handleSignInResult(Task<GoogleSignInAccount> completedTask) {
         try {
             GoogleSignInAccount account = completedTask.getResult(ApiException.class);
-            persistUser(account);
+            persistNewUser(account);
             startActivity(new Intent(SignInActivity.this, MainActivity.class));
             finish();
         } catch (ApiException e) {
@@ -84,9 +99,13 @@ public class SignInActivity extends AppCompatActivity {
         }
     }
 
-    private void persistUser(GoogleSignInAccount account) {
+    private void persistNewUser(GoogleSignInAccount account) {
         UserEntity newUser = new UserEntity(account.getEmail(), account.getDisplayName());
         mUserRepository.insertUser(newUser);
     }
 
+    @Override
+    protected void onDestroy() {
+        super.onDestroy();
+    }
 }
