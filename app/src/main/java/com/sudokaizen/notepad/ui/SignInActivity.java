@@ -32,7 +32,6 @@ public class SignInActivity extends AppCompatActivity {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_sign_in);
         initSignInButton();
-
     }
 
     private void initSignInButton() {
@@ -71,7 +70,7 @@ public class SignInActivity extends AppCompatActivity {
     private void handleSignInResult(Task<GoogleSignInAccount> completedTask) {
         try {
             GoogleSignInAccount account = completedTask.getResult(ApiException.class);
-            System.out.println("account " + account.getEmail());
+            persistUser(account);
             startActivity(new Intent(SignInActivity.this, MainActivity.class));
             finish();
         } catch (ApiException e) {
@@ -81,6 +80,11 @@ public class SignInActivity extends AppCompatActivity {
 
             Toast.makeText(this, "Error! Sign in failed", Toast.LENGTH_SHORT).show();
         }
+    }
+
+    private void persistUser(GoogleSignInAccount account) {
+        UserEntity newUser = new UserEntity(account.getEmail(), account.getDisplayName());
+        newUser.toString();
     }
 
 }
