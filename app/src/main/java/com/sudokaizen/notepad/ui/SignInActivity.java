@@ -16,6 +16,7 @@ import com.google.android.gms.common.api.ApiException;
 import com.google.android.gms.tasks.Task;
 import com.sudokaizen.notepad.AppExecutors;
 import com.sudokaizen.notepad.R;
+import com.sudokaizen.notepad.database.NoteRepository;
 import com.sudokaizen.notepad.database.UserEntity;
 import com.sudokaizen.notepad.database.UserRepository;
 
@@ -24,6 +25,7 @@ public class SignInActivity extends AppCompatActivity {
     private static final int RC_SIGN_IN = 123;
     private AppExecutors mAppExecutors;
     private UserRepository mUserRepository;
+    private NoteRepository mNoteRepository;
     private UserEntity formerUser;
 
     @Override
@@ -32,6 +34,7 @@ public class SignInActivity extends AppCompatActivity {
         setContentView(R.layout.activity_sign_in);
         mAppExecutors = new AppExecutors();
         mUserRepository = UserRepository.getInstance(this);
+        mNoteRepository = NoteRepository.getInstance(this);
         initSignInButton();
     }
 
@@ -89,7 +92,12 @@ public class SignInActivity extends AppCompatActivity {
     private void handleSignInResult(Task<GoogleSignInAccount> completedTask) {
         try {
             GoogleSignInAccount account = completedTask.getResult(ApiException.class);
-            persistNewUser(account);
+            if ((formerUser == null) || (isNotFormerUser(account))) {
+                mUserRepository.deleteAllUsers();
+                mNoteRepository.deleteAllNotes();
+                persistNewUser(account);
+            }
+
             startActivity(new Intent(SignInActivity.this, MainActivity.class));
             finish();
         } catch (ApiException e) {
@@ -98,6 +106,10 @@ public class SignInActivity extends AppCompatActivity {
             Log.w("SignInActivity", "signInResult:failed code=" + e.getMessage());
             Toast.makeText(this, "Error! Sign in failed", Toast.LENGTH_SHORT).show();
         }
+    }
+
+    private boolean isNotFormerUser(GoogleSignInAccount account) {
+        return !account.getEmail().equals(formerUser.getEmailAddress());
     }
 
     private void persistNewUser(GoogleSignInAccount account) {

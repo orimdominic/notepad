@@ -23,7 +23,6 @@ import static com.sudokaizen.notepad.ui.MainActivity.NOTE_ID;
 public class CreateNoteActivity extends AppCompatActivity {
 
     private NoteRepository mNoteRepository;
-    private UserRepository mUserRepository;
     private TextInputEditText etNote;
     private boolean isNewNote;
     private int editNoteId;
@@ -42,7 +41,6 @@ public class CreateNoteActivity extends AppCompatActivity {
 
         etNote = findViewById(R.id.et_create_note);
         mNoteRepository = NoteRepository.getInstance(CreateNoteActivity.this);
-        mUserRepository = UserRepository.getInstance(CreateNoteActivity.this);
         setupViewModel();
     }
 
