@@ -16,6 +16,10 @@ android {
             proguardFiles getDefaultProguardFile('proguard-android.txt'), 'proguard-rules.pro'
         }
     }
+    compileOptions {
+        sourceCompatibility JavaVersion.VERSION_1_8
+        targetCompatibility JavaVersion.VERSION_1_8
+    }
 }
 
 dependencies {
@@ -32,6 +36,9 @@ dependencies {
 
     // ViewModel, LiveData
     implementation 'android.arch.lifecycle:extensions:1.1.1'
+
+    // Work Manager
+    implementation "android.arch.work:work-runtime:1.0.0-beta01"
 
     // Google Play services
     implementation 'com.google.android.gms:play-services-auth:16.0.1'

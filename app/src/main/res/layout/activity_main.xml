@@ -9,12 +9,13 @@
 
     <android.support.v7.widget.RecyclerView
         android:id="@+id/rv_main_notes"
-        android:overScrollMode="never"
-        android:paddingTop="8dp"
-        android:paddingStart="8dp"
-        android:paddingEnd="8dp"
         android:layout_width="match_parent"
         android:layout_height="match_parent"
+        android:overScrollMode="never"
+        android:paddingStart="8dp"
+        android:paddingTop="8dp"
+        android:paddingEnd="8dp"
+        android:paddingBottom="8dp"
         tools:listitem="@layout/item_note" />
 
     <android.support.design.widget.FloatingActionButton

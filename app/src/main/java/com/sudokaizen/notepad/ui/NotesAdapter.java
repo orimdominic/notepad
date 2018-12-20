@@ -43,7 +43,7 @@ public class NotesAdapter extends RecyclerView.Adapter<NotesAdapter.NoteViewHold
         final NoteEntry note = mNoteEntries.get(i);
 
         noteViewHolder.tvContent.setText(note.getContent());
-        noteViewHolder.tvDateTime.setText(note.getId() + " " + note.getDateString());
+        noteViewHolder.tvDateTime.setText(note.getDateString());
 
         noteViewHolder.cvNote.setOnClickListener(new View.OnClickListener() {
             @Override
