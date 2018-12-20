@@ -8,6 +8,7 @@ import com.sudokaizen.notepad.AppExecutors;
 
 public class UserRepository {
 
+    private static final String TAG = "UserRepository";
     private static UserRepository instance;
     private AppDatabase appDb;
     private AppExecutors mAppExecutors;
@@ -35,14 +36,8 @@ public class UserRepository {
         });
     }
 
-    public LiveData<UserEntity> getUser() {
-        mAppExecutors.diskIO().execute(new Runnable() {
-            @Override
-            public void run() {
-                mUser.postValue(appDb.userDao().getUser());
-            }
-        });
-        return mUser;
+    public UserEntity getUser() {
+        return appDb.userDao().getUser();
     }
 
     public void deleteUser(final UserEntity user) {

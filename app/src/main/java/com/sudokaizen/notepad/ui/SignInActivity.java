@@ -1,6 +1,9 @@
 package com.sudokaizen.notepad.ui;
 
+import android.arch.lifecycle.Observer;
+import android.arch.lifecycle.ViewModelProviders;
 import android.content.Intent;
+import android.support.annotation.Nullable;
 import android.support.v7.app.AppCompatActivity;
 import android.os.Bundle;
 import android.util.Log;
@@ -18,12 +21,15 @@ import com.sudokaizen.notepad.R;
 import com.sudokaizen.notepad.database.NoteRepository;
 import com.sudokaizen.notepad.database.UserEntity;
 import com.sudokaizen.notepad.database.UserRepository;
+import com.sudokaizen.notepad.viewmodel.CreateNoteViewModel;
 
 public class SignInActivity extends AppCompatActivity {
 
     private static final int RC_SIGN_IN = 123;
     private UserRepository mUserRepository;
     private NoteRepository mNoteRepository;
+    private CreateNoteViewModel mCreateNoteViewModel;
+    private UserEntity formerUser;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -32,6 +38,16 @@ public class SignInActivity extends AppCompatActivity {
         mUserRepository = UserRepository.getInstance(this);
         mNoteRepository = NoteRepository.getInstance(this);
         System.out.println("Check created");
+
+        mCreateNoteViewModel = ViewModelProviders.of(this).get(CreateNoteViewModel.class);
+        mCreateNoteViewModel.mLiveUser.observe(this, new Observer<UserEntity>() {
+            @Override
+            public void onChanged(@Nullable UserEntity userEntity) {
+                formerUser = userEntity;
+            }
+        });
+
+
         // Configure sign-in to request the user's ID, email address, and basic
         // profile. ID and basic profile are included in DEFAULT_SIGN_IN.
         GoogleSignInOptions gso = new GoogleSignInOptions.Builder(GoogleSignInOptions.DEFAULT_SIGN_IN)
@@ -81,20 +97,23 @@ public class SignInActivity extends AppCompatActivity {
         try {
             GoogleSignInAccount account = completedTask.getResult(ApiException.class);
             System.out.println("account "+account.getEmail());
-            UserEntity user = new UserEntity(account.getEmail(), account.getDisplayName());
-            if (!isFormerUser(user)) {
+            UserEntity currentUser = new UserEntity(account.getEmail(), account.getDisplayName());
+
+            if (formerUser == null){
                 mUserRepository.deleteAllUsers();
-                mUserRepository.insertUser(user);
+                mUserRepository.insertUser(currentUser);
+            }else if (!formerUser.getId().equals(currentUser.getId())){
+                // diff person
+                mUserRepository.deleteAllUsers();
                 mNoteRepository.deleteAllNotes();
-                System.out.println("Check onActivityResult inside if");
+                mUserRepository.insertUser(currentUser);
             }
+
             System.out.println("Check onActivityResult after if");
             startActivity(new Intent(SignInActivity.this, MainActivity.class));
             finish();
 
-            Log.d("SignInActivity", "email " + account.getEmail());
-            // Signed in successfully, show authenticated UI.
-        } catch (ApiException e) {
+            } catch (ApiException e) {
             // The ApiException status code indicates the detailed failure reason.
             // Please refer to the GoogleSignInStatusCodes class reference for more information.
             Log.w("SignInActivity", "signInResult:failed code=" + e.getMessage());
@@ -103,11 +122,6 @@ public class SignInActivity extends AppCompatActivity {
                         .show();
 
         }
-    }
-
-    private boolean isFormerUser(UserEntity newUser) {
-        UserEntity formerUser = mUserRepository.getUser().getValue();
-        return formerUser == null||formerUser.getId().equals(newUser.getId()) ;
     }
 
 }

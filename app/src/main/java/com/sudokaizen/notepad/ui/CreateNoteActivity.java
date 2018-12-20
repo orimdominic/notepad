@@ -1,5 +1,6 @@
 package com.sudokaizen.notepad.ui;
 
+import android.annotation.SuppressLint;
 import android.arch.lifecycle.Observer;
 import android.arch.lifecycle.ViewModelProviders;
 import android.os.Bundle;
@@ -12,6 +13,7 @@ import android.widget.Toast;
 import com.sudokaizen.notepad.R;
 import com.sudokaizen.notepad.database.NoteRepository;
 import com.sudokaizen.notepad.database.NoteEntry;
+import com.sudokaizen.notepad.database.UserEntity;
 import com.sudokaizen.notepad.viewmodel.CreateNoteViewModel;
 
 import static com.sudokaizen.notepad.ui.MainActivity.NOTE_ID;
@@ -22,8 +24,10 @@ public class CreateNoteActivity extends AppCompatActivity {
     private TextInputEditText etNote;
     private boolean isNewNote;
     private int editNoteId;
+    private UserEntity user;
 
 
+    @SuppressLint("ResourceAsColor")
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
@@ -40,6 +44,7 @@ public class CreateNoteActivity extends AppCompatActivity {
     private void setupViewModel() {
         CreateNoteViewModel createNoteViewModel = ViewModelProviders.of(this)
                 .get(CreateNoteViewModel.class);
+        createNoteViewModel.getUser();
         createNoteViewModel.mLiveNote.observe(this, new Observer<NoteEntry>() {
             @Override
             public void onChanged(@Nullable NoteEntry noteEntry) {
@@ -47,6 +52,13 @@ public class CreateNoteActivity extends AppCompatActivity {
                     etNote.setText(noteEntry.getContent());
                     editNoteId = noteEntry.getId();
                 }
+            }
+        });
+
+        createNoteViewModel.mLiveUser.observe(this, new Observer<UserEntity>() {
+            @Override
+            public void onChanged(@Nullable UserEntity userEntity) {
+               user  = userEntity;
             }
         });
 
