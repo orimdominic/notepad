@@ -94,6 +94,8 @@ public class MainActivity extends AppCompatActivity {
             }
         });
 
+        checkForUser();
+
         setupViewModel();
     }
 
@@ -106,6 +108,7 @@ public class MainActivity extends AppCompatActivity {
             public void onChanged(@Nullable List<NoteEntry> noteEntries) {
                 if (noteEntries.size() == 0) {
                     // TODO: 08-Dec-18 Display empty view for RecyclerView  and hide RecyclerView
+                    // TODO on visible
                     mNoteRepository.updateLocalNotes(currentUser.getId());
                 } else {
                     mNotesAdapter = new NotesAdapter(MainActivity.this, noteEntries);

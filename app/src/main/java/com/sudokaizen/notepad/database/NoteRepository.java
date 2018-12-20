@@ -76,24 +76,6 @@ public class NoteRepository {
         return appDb.noteDao().getNoteById(noteId);
     }
 
-
-//    public void insertNoteToRemoteDb(final String userId, final  NoteEntry note){
-//        final String noteId = String.valueOf(note.getId());
-//        mRootRef.child(userId).child(noteId)
-//                .setValue(note)
-//                .addOnCompleteListener(new OnCompleteListener<Void>() {
-//                    @Override
-//                    public void onComplete(@NonNull Task<Void> task) {
-//                        if (task.isSuccessful()){
-//                            insertNote(note);
-//                            Toast.makeText(mContext, "Note saved", Toast.LENGTH_SHORT).show();
-//                        }else {
-//                            Toast.makeText(mContext, "Note not saved", Toast.LENGTH_SHORT).show();
-//                        }
-//                    }
-//                });
-//    }
-
     public void updateRemoteNotes(String currentUserId, List<NoteEntry> noteEntries) {
         mRootRef.child(currentUserId).setValue(noteEntries);
     }
@@ -102,7 +84,8 @@ public class NoteRepository {
         mRootRef.child(userId).addChildEventListener(new ChildEventListener() {
             @Override
             public void onChildAdded(@NonNull DataSnapshot dataSnapshot, @Nullable String s) {
-
+                NoteEntry noteEntry = dataSnapshot.getValue(NoteEntry.class);
+                insertNote(noteEntry);
             }
 
             @Override
