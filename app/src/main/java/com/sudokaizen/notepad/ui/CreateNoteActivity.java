@@ -17,7 +17,7 @@ import com.sudokaizen.notepad.database.NoteEntry;
 import com.sudokaizen.notepad.database.UserEntity;
 import com.sudokaizen.notepad.viewmodel.CreateNoteViewModel;
 
-import static com.sudokaizen.notepad.ui.MainActivity.NOTE_ID;
+import static com.sudokaizen.notepad.ui.NotesListActivity.NOTE_ID;
 
 public class CreateNoteActivity extends AppCompatActivity {
 

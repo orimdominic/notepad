@@ -97,7 +97,7 @@ public class SignInActivity extends AppCompatActivity {
                 mNoteRepository.deleteAllLocalNotes();
                 persistNewUser(account);
             }
-            startActivity(new Intent(SignInActivity.this, MainActivity.class));
+            startActivity(new Intent(SignInActivity.this, NotesListActivity.class));
             finish();
         } catch (ApiException e) {
             // The ApiException status code indicates the detailed failure reason.

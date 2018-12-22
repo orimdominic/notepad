@@ -15,7 +15,7 @@
         android:supportsRtl="true"
         android:theme="@style/AppTheme">
         <activity
-            android:name=".ui.MainActivity"
+            android:name=".ui.NotesListActivity"
             android:theme="@style/AppTheme.Light.DarkActionBar">
             <intent-filter>
                 <action android:name="android.intent.action.MAIN" />
@@ -26,11 +26,11 @@
         <activity
             android:name=".ui.CreateNoteActivity"
             android:label="@string/title_activity_create_note"
-            android:parentActivityName=".ui.MainActivity"
+            android:parentActivityName=".ui.NotesListActivity"
             android:theme="@style/AppTheme.Light.DarkActionBar">
             <meta-data
                 android:name="android.support.PARENT_ACTIVITY"
-                android:value="com.sudokaizen.notepad.ui.MainActivity" />
+                android:value="com.sudokaizen.notepad.ui.NotesListActivity" />
         </activity>
         <activity
             android:name=".ui.SignInActivity"

@@ -9,7 +9,6 @@ import android.content.Intent;
 import android.support.annotation.NonNull;
 import android.support.annotation.Nullable;
 import android.support.design.widget.FloatingActionButton;
-import android.support.v4.widget.NestedScrollView;
 import android.support.v7.app.AlertDialog;
 import android.support.v7.app.AppCompatActivity;
 import android.os.Bundle;
@@ -38,7 +37,7 @@ import com.sudokaizen.notepad.viewmodel.MainViewModel;
 
 import java.util.List;
 
-public class MainActivity extends AppCompatActivity {
+public class NotesListActivity extends AppCompatActivity {
 
     private MainViewModel mViewModel;
     private RecyclerView rvNotes;
@@ -48,7 +47,7 @@ public class MainActivity extends AppCompatActivity {
     private UserRepository mUserRepository;
     private UserEntity currentUser;
 
-    public static final String NOTE_ID = "com.sudokaizen.notepad.ui.MainActivity.NOTE_ID_KEY";
+    public static final String NOTE_ID = "com.sudokaizen.notepad.ui.NotesListActivity.NOTE_ID_KEY";
     private AppExecutors mAppExecutors;
 
     @Override
@@ -59,19 +58,19 @@ public class MainActivity extends AppCompatActivity {
         // the GoogleSignInAccount will be non-null.
         GoogleSignInAccount account = GoogleSignIn.getLastSignedInAccount(this);
         if (account == null) {
-            startActivity(new Intent(MainActivity.this, SignInActivity.class));
+            startActivity(new Intent(NotesListActivity.this, SignInActivity.class));
             finish();
         }
 
         setContentView(R.layout.activity_main);
 
         mAppExecutors = new AppExecutors();
-        mNoteRepository = NoteRepository.getInstance(MainActivity.this);
+        mNoteRepository = NoteRepository.getInstance(NotesListActivity.this);
         mUserRepository = UserRepository.getInstance(this);
         FloatingActionButton fab = findViewById(R.id.fab);
         rvNotes = findViewById(R.id.rv_main_notes);
         rvLayoutManager =
-                new LinearLayoutManager(MainActivity.this,
+                new LinearLayoutManager(NotesListActivity.this,
                         LinearLayoutManager.VERTICAL, false);
         rvNotes.setLayoutManager(rvLayoutManager);
 
@@ -91,7 +90,7 @@ public class MainActivity extends AppCompatActivity {
         fab.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View view) {
-                startActivity(new Intent(MainActivity.this, CreateNoteActivity.class));
+                startActivity(new Intent(NotesListActivity.this, CreateNoteActivity.class));
             }
         });
 
@@ -102,9 +101,9 @@ public class MainActivity extends AppCompatActivity {
 
     private void setupViewModel() {
 
-        mViewModel = ViewModelProviders.of(MainActivity.this)
+        mViewModel = ViewModelProviders.of(NotesListActivity.this)
                 .get(MainViewModel.class);
-        mViewModel.getNotes().observe(MainActivity.this, new Observer<List<NoteEntry>>() {
+        mViewModel.getNotes().observe(NotesListActivity.this, new Observer<List<NoteEntry>>() {
             @Override
             public void onChanged(@Nullable List<NoteEntry> noteEntries) {
                 if (noteEntries.size() == 0) {
@@ -112,7 +111,7 @@ public class MainActivity extends AppCompatActivity {
                     // TODO on visible
                     mNoteRepository.updateLocalNotes(currentUser.getId());
                 } else {
-                    mNotesAdapter = new NotesAdapter(MainActivity.this, noteEntries);
+                    mNotesAdapter = new NotesAdapter(NotesListActivity.this, noteEntries);
                     mNotesAdapter.notifyDataSetChanged();
                     rvNotes.setAdapter(mNotesAdapter);
                 }
@@ -191,7 +190,7 @@ public class MainActivity extends AppCompatActivity {
                 .addOnCompleteListener(this, new OnCompleteListener<Void>() {
                     @Override
                     public void onComplete(@NonNull Task<Void> task) {
-                        startActivity(new Intent(MainActivity.this, SignInActivity.class));
+                        startActivity(new Intent(NotesListActivity.this, SignInActivity.class));
                         finish();
                     }
                 });

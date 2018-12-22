@@ -12,12 +12,10 @@ import android.widget.TextView;
 
 import com.sudokaizen.notepad.R;
 import com.sudokaizen.notepad.database.NoteEntry;
-import com.sudokaizen.notepad.viewmodel.CreateNoteViewModel;
 
 import java.util.List;
-import java.util.Random;
 
-import static com.sudokaizen.notepad.ui.MainActivity.NOTE_ID;
+import static com.sudokaizen.notepad.ui.NotesListActivity.NOTE_ID;
 
 public class NotesAdapter extends RecyclerView.Adapter<NotesAdapter.NoteViewHolder> {
     private List<NoteEntry> mNoteEntries;
