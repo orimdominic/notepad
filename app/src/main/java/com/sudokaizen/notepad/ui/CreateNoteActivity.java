@@ -72,6 +72,7 @@ public class CreateNoteActivity extends AppCompatActivity {
             String noteId = extras.getString(NOTE_ID);
             createNoteViewModel.getNoteById(noteId);
             isNewNote = false;
+            getSupportActionBar().setTitle("Edit note");
         }
 
     }
