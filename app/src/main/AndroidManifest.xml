@@ -16,7 +16,7 @@
         android:theme="@style/AppTheme">
         <activity
             android:name=".ui.NotesListActivity"
-            android:theme="@style/AppTheme.Light.DarkActionBar">
+            android:theme="@style/AppTheme.Dark.NoActionBar">
             <intent-filter>
                 <action android:name="android.intent.action.MAIN" />
                 <category android:name="android.intent.category.LAUNCHER" />
@@ -34,7 +34,7 @@
         </activity>
         <activity
             android:name=".ui.SignInActivity"
-            android:theme="@style/AppTheme.Light.NoActionBar"
+            android:theme="@style/AppTheme.Dark.NoActionBar"
             android:noHistory="true">
         </activity>
 
