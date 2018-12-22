@@ -62,7 +62,7 @@ public class NotesListActivity extends AppCompatActivity {
             finish();
         }
 
-        setContentView(R.layout.activity_main);
+        setContentView(R.layout.activity_notes_list);
 
         mAppExecutors = new AppExecutors();
         mNoteRepository = NoteRepository.getInstance(NotesListActivity.this);

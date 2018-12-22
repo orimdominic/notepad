@@ -37,6 +37,10 @@
             android:theme="@style/AppTheme.Light.NoActionBar"
             android:noHistory="true">
         </activity>
+
+        <meta-data
+            android:name="preloaded_fonts"
+            android:resource="@array/preloaded_fonts" />
     </application>
 
 </manifest>

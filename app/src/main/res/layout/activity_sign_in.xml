@@ -6,13 +6,26 @@
     android:layout_height="match_parent"
     tools:context=".ui.SignInActivity">
 
+    <!--<android.support.design.button.MaterialButton-->
+        <!--android:layout_width="252dp"-->
+        <!--android:layout_height="105dp"-->
+        <!--android:layout_marginBottom="292dp"-->
+        <!--android:drawableStart="@drawable/ic_btn_google_light_normal"-->
+        <!--android:drawableLeft="@drawable/ic_btn_google_light_normal"-->
+        <!--android:layoutDirection="rtl"-->
+        <!--android:text="Sign in with Google"-->
+        <!--app:layout_constraintBottom_toBottomOf="parent"-->
+        <!--app:layout_constraintEnd_toEndOf="parent"-->
+        <!--app:layout_constraintHorizontal_bias="0.498"-->
+        <!--app:layout_constraintStart_toStartOf="parent" />-->
+
     <com.google.android.gms.common.SignInButton
-        android:id="@+id/sign_in_button"
-        android:layout_width="wrap_content"
-        android:layout_height="wrap_content"
-        android:layout_marginBottom="40dp"
-        app:layout_constraintBottom_toBottomOf="parent"
-        app:layout_constraintEnd_toEndOf="parent"
-        app:layout_constraintHorizontal_bias="0.50"
-        app:layout_constraintStart_toStartOf="parent" />
+    android:id="@+id/sign_in_button"
+    android:layout_width="wrap_content"
+    android:layout_height="wrap_content"
+    android:layout_marginBottom="40dp"
+    app:layout_constraintBottom_toBottomOf="parent"
+    app:layout_constraintEnd_toEndOf="parent"
+    app:layout_constraintHorizontal_bias="0.50"
+    app:layout_constraintStart_toStartOf="parent" />
 </android.support.constraint.ConstraintLayout>

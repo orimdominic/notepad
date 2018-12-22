@@ -29,6 +29,8 @@
             android:ellipsize="end"
             android:lineSpacingMultiplier="1.25"
             android:maxLines="5"
+            android:textAppearance="@android:style/TextAppearance.Material.Small"
+            app:fontFamily="@font/pt_sans"
             tools:text="@string/sample_note" />
 
         <TextView
@@ -41,6 +43,7 @@
             android:layout_marginEnd="16dp"
             android:layout_marginBottom="16dp"
             android:background="@android:color/transparent"
+            android:fontFamily="@font/pt_sans"
             android:textStyle="bold"
             tools:text="@string/sample_date" />
     </LinearLayout>
