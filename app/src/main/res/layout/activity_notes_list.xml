@@ -18,20 +18,17 @@
             android:id="@+id/toolbar_notes_list"
             android:layout_width="match_parent"
             android:layout_height="?attr/actionBarSize"
-            android:background="?attr/colorPrimary"
-            app:layout_scrollFlags="scroll|enterAlways" />
+            android:background="?attr/colorPrimary" />
     </android.support.design.widget.AppBarLayout>
 
         <android.support.v7.widget.RecyclerView
             android:id="@+id/rv_main_notes"
+            android:layout_marginTop="?attr/actionBarSize"
             android:layout_width="match_parent"
             android:layout_height="match_parent"
-            android:overScrollMode="never"
             android:paddingStart="8dp"
             android:paddingEnd="8dp"
             tools:listitem="@layout/item_note" />
-
-
 
     <android.support.design.widget.FloatingActionButton
         android:id="@+id/fab"
