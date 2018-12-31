@@ -8,4 +8,7 @@ Ne unum alienum laboramus vix, suas delenit invenire in sea. Nam sonet volumus e
     <string name="title_activity_create_note">Create note</string>
     <string name="title_activity_sign_in">Sign in</string>
     <string name="welcome_text">Record your notes in style!</string>
+    <string name="view_my_story">View my story</string>
+    <string name="no_notes_found">No notes found.</string>
+    <string name="you_can_add_notes">You can add notes using the + button on the bottom right</string>
 </resources>

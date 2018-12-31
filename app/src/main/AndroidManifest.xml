@@ -16,7 +16,6 @@
         android:theme="@style/AppTheme">
         <activity
             android:name=".ui.NotesListActivity"
-            android:label="@string/notes_list_activity_label"
             android:theme="@style/AppTheme.Dark.NoActionBar">
             <intent-filter>
                 <action android:name="android.intent.action.MAIN" />

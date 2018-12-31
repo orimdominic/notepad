@@ -43,6 +43,7 @@ import java.util.List;
 public class NotesListActivity extends AppCompatActivity {
 
     private RecyclerView rvNotes;
+    private View rvEmptyView;
     private NotesAdapter mNotesAdapter;
     private NoteRepository mNoteRepository;
     private UserRepository mUserRepository;
@@ -66,6 +67,7 @@ public class NotesListActivity extends AppCompatActivity {
         setContentView(R.layout.activity_notes_list);
 
         Toolbar toolbar = findViewById(R.id.toolbar_notes_list);
+        toolbar.setTitle(R.string.notes_list_activity_label);
         setSupportActionBar(toolbar);
 
         mAppExecutors = new AppExecutors();
@@ -73,6 +75,7 @@ public class NotesListActivity extends AppCompatActivity {
         mUserRepository = UserRepository.getInstance(this);
         FloatingActionButton fab = findViewById(R.id.fab);
         rvNotes = findViewById(R.id.rv_main_notes);
+        rvEmptyView = findViewById(R.id.rv_empty_view);
         LinearLayoutManager rvLayoutManager = new LinearLayoutManager(NotesListActivity.this,
                 LinearLayoutManager.VERTICAL, false);
         rvNotes.setLayoutManager(rvLayoutManager);
@@ -120,12 +123,14 @@ public class NotesListActivity extends AppCompatActivity {
             @Override
             public void onChanged(@Nullable List<NoteEntry> noteEntries) {
                 if (noteEntries.size() == 0) {
-                    // TODO: 08-Dec-18 Display empty view for RecyclerView  and hide RecyclerView
-                    // TODO on visible
                     mNoteRepository.updateLocalNotes(currentUser.getId());
+                    rvEmptyView.setVisibility(View.VISIBLE);
+                    rvNotes.setVisibility(View.GONE);
                 } else {
                     mNotesAdapter = new NotesAdapter(NotesListActivity.this, noteEntries);
                     mNotesAdapter.notifyDataSetChanged();
+                    rvEmptyView.setVisibility(View.GONE);
+                    rvNotes.setVisibility(View.VISIBLE);
                     rvNotes.setAdapter(mNotesAdapter);
                 }
             }
@@ -146,8 +151,6 @@ public class NotesListActivity extends AppCompatActivity {
         super.onResume();
         checkForUser();
     }
-
-    // TODO: 14-Dec-18 Add settings for user to sort notes by their choice criterion
 
     private void showDeleteConfirmationDialog(final int notePosition) {
 
