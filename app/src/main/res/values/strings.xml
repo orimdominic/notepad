@@ -1,9 +1,11 @@
 <resources>
     <string name="app_name">Notepad</string>
+    <string name="notes_list_activity_label">Notes</string>
     <string name="sample_note">Lorem ipsum dolor sit amet, pri meliore signiferumque no, virtute erroribus maiestatis per ad. Vidisse patrioque abhorreant ad mel, oratio menandri scriptorem eum no. In sed iisque offendit, at ius deseruisse deterruisset. In eum suas summo, nostrud voluptua constituam mel ei, sea docendi iracundia te. Libris aperiri id sit, no mei iuvaret veritus reformidans. Ea has legendos lobortis adversarium, cu consulatu cotidieque vel.
 
 Ne unum alienum laboramus vix, suas delenit invenire in sea. Nam sonet volumus et, et neglegentur consectetuer nec. Nec omnium adipisci conceptam ea, et aeterno mnesarchum eos. Ne sit ubique quodsi, latine moderatius cu quo, et vix libris graeco. Labitur delicata has ne, nam oratio oportere adolescens in.</string>
     <string name="sample_date">Oct 3, 5:04 am</string>
     <string name="title_activity_create_note">Create note</string>
     <string name="title_activity_sign_in">Sign in</string>
+    <string name="welcome_text">Record your notes in style!</string>
 </resources>

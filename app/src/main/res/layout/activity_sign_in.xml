@@ -6,18 +6,18 @@
     android:layout_height="match_parent"
     tools:context=".ui.SignInActivity">
 
-    <!--<android.support.design.button.MaterialButton-->
-        <!--android:layout_width="252dp"-->
-        <!--android:layout_height="105dp"-->
-        <!--android:layout_marginBottom="292dp"-->
-        <!--android:drawableStart="@drawable/ic_btn_google_light_normal"-->
-        <!--android:drawableLeft="@drawable/ic_btn_google_light_normal"-->
-        <!--android:layoutDirection="rtl"-->
-        <!--android:text="Sign in with Google"-->
-        <!--app:layout_constraintBottom_toBottomOf="parent"-->
-        <!--app:layout_constraintEnd_toEndOf="parent"-->
-        <!--app:layout_constraintHorizontal_bias="0.498"-->
-        <!--app:layout_constraintStart_toStartOf="parent" />-->
+    <ImageView
+        android:id="@+id/imageView"
+        android:layout_width="wrap_content"
+        android:layout_height="466dp"
+        android:layout_marginBottom="32dp"
+        android:src="@drawable/welcome_bgnd"
+        app:layout_constraintBottom_toBottomOf="parent"
+        app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintHorizontal_bias="0.0"
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintTop_toTopOf="parent"
+        app:layout_constraintVertical_bias="0.463" />
 
     <com.google.android.gms.common.SignInButton
     android:id="@+id/sign_in_button"
@@ -28,4 +28,33 @@
     app:layout_constraintEnd_toEndOf="parent"
     app:layout_constraintHorizontal_bias="0.50"
     app:layout_constraintStart_toStartOf="parent" />
+
+    <TextView
+        android:id="@+id/app_name"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_marginStart="8dp"
+        android:layout_marginTop="32dp"
+        android:layout_marginEnd="8dp"
+        android:text="@string/app_name"
+        android:textAppearance="@style/TextAppearance.MaterialComponents.Headline2"
+        android:textColor="@color/primary_dark"
+        app:layout_constraintBottom_toTopOf="@+id/imageView"
+        app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintTop_toTopOf="parent"
+        app:layout_constraintVertical_bias="0.5" />
+
+    <TextView
+        android:id="@+id/textView"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_marginStart="8dp"
+        android:layout_marginTop="8dp"
+        android:layout_marginEnd="8dp"
+        android:text="@string/welcome_text"
+        android:textAppearance="@style/TextAppearance.MaterialComponents.Subtitle1"
+        app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintTop_toBottomOf="@+id/app_name" />
 </android.support.constraint.ConstraintLayout>
