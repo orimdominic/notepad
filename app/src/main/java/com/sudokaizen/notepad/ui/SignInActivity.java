@@ -1,6 +1,9 @@
 package com.sudokaizen.notepad.ui;
 
+import android.content.ActivityNotFoundException;
 import android.content.Intent;
+import android.net.Uri;
+import android.support.design.button.MaterialButton;
 import android.support.v7.app.AppCompatActivity;
 import android.os.Bundle;
 import android.util.Log;
@@ -28,6 +31,7 @@ public class SignInActivity extends AppCompatActivity {
     private NoteRepository mNoteRepository;
     private UserEntity formerUser;
 
+
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
@@ -35,6 +39,24 @@ public class SignInActivity extends AppCompatActivity {
         mAppExecutors = new AppExecutors();
         mUserRepository = UserRepository.getInstance(this);
         mNoteRepository = NoteRepository.getInstance(this);
+        MaterialButton btnViewStory = findViewById(R.id.btn_view_story);
+        btnViewStory.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View view) {
+                try {
+                    String MY_STORY_LINK =
+                            "https://medium.com/@sudo_kaizen/my-dsc20daysofcode-experience-3d0818733067";
+                    Intent myIntent = new Intent(Intent.ACTION_VIEW, Uri.parse(MY_STORY_LINK));
+                    startActivity(myIntent);
+                } catch (ActivityNotFoundException e) {
+                    Toast.makeText(SignInActivity.this,
+                            "No application can handle this request. Please install a web browser",
+                            Toast.LENGTH_LONG)
+                            .show();
+                    e.printStackTrace();
+                }
+            }
+        });
         initSignInButton();
     }
 

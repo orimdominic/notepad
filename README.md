@@ -1,4 +1,3 @@
-
 #  Notepad
 
 Notepad is an simple android application built during the #DSC20DaysOfCode organised by Unilag Developer Students Group [DSCUnilag on Twitter](https://twitter.com/DSCUnilag).
@@ -10,6 +9,8 @@ At this point, I had completed the tasks of put out by the program, but then, no
 
 Please find a link to the apk here
 
+
 **For developers**
-Please create an issue or a pull request if you feel the necessity to. I'm always open.
+
+Please create an issue or a pull request with another branch if you feel the necessity to. I'm always open.
 >Appreciation to Unilag Developer Students Group for the guidance and opportunity!
